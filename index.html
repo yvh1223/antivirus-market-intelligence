@@ -1,43 +1,443 @@
-                    y: { 
-                        beginAtZero: true,
-                        max: 70,
-                        title: { display: true, text: 'Critical Issues Rate (%)' }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'top' }
-                }
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Antivirus Market Intelligence | Executive Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-navy: #1a365d;
+            --secondary-blue: #2d5986;
+            --accent-gold: #f6ad55;
+            --success-green: #38a169;
+            --warning-orange: #ed8936;
+            --danger-red: #e53e3e;
+            --critical-red: #c53030;
+            --neutral-gray: #4a5568;
+            --light-gray: #f7fafc;
+            --border-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(26, 54, 93, 0.15);
+        }
+
+        .header h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .critical-alert {
+            background: linear-gradient(135deg, var(--critical-red), var(--danger-red));
+            color: white;
+            padding: 1rem 2rem;
+            margin: 1rem auto;
+            border-radius: 8px;
+            max-width: 900px;
+            font-weight: 600;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { opacity: 1; }
+            50% { opacity: 0.8; }
+            100% { opacity: 1; }
+        }
+
+        .nav-menu {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .executive-summary {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .summary-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-gray);
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .summary-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-alert {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: var(--danger-red);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+        }
+
+        .icon-primary { background: linear-gradient(135deg, var(--primary-navy), var(--secondary-blue)); color: white; }
+        .icon-success { background: linear-gradient(135deg, var(--success-green), #48bb78); color: white; }
+        .icon-warning { background: linear-gradient(135deg, var(--warning-orange), var(--accent-gold)); color: white; }
+        .icon-danger { background: linear-gradient(135deg, var(--danger-red), var(--critical-red)); color: white; }
+
+        .card-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
+
+        .card-change {
+            font-size: 0.85rem;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+        .change-positive { color: var(--success-green); }
+        .change-critical { color: var(--critical-red); font-weight: 700; }
+
+        .analytics-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-gray);
+            position: relative;
+        }
+
+        .chart-alert {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            background: var(--danger-red);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 10px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-large {
+            grid-column: span 2;
+            height: 450px;
+        }
+
+        .data-source {
+            background: #f0f7ff;
+            border: 1px solid #bde7ff;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem 0;
+            font-size: 0.9rem;
+            color: var(--primary-navy);
+        }
+
+        .footer {
+            background: var(--primary-navy);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-large { grid-column: span 1; height: 350px; }
+            .header h1 { font-size: 2rem; }
+            .summary-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Antivirus Market Intelligence</h1>
+        <p>AI-Powered Consumer Security Analytics Dashboard</p>
+        <div class="critical-alert">
+            🚨 iOS Apps Show 41-66% Critical Issues (vs 9-42% Android) - Platform Crisis Identified
+        </div>
+        <div class="data-source">
+            <strong>Data:</strong> 87,730 Reviews (2022-2025) | <strong>Coverage:</strong> Google Play + Apple Store | <strong>Updated:</strong> June 21, 2025
+        </div>
+        <nav class="nav-menu">
+            <a href="index.html">📊 Dashboard</a>
+            <a href="advanced.html">🔬 Analytics</a>
+            <a href="https://github.com/yvh1223/antivirus-market-intelligence">📖 GitHub</a>
+        </nav>
+    </header>
+
+    <div class="executive-summary">
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-header">
+                    <div class="card-title">Total Reviews</div>
+                    <div class="card-icon icon-primary">📊</div>
+                </div>
+                <div class="card-value" id="totalReviews">87,730</div>
+                <div class="card-change change-positive">▲ 2022-2025 Data</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-alert">!</div>
+                <div class="card-header">
+                    <div class="card-title">iOS Crisis Rate</div>
+                    <div class="card-icon icon-danger">🚨</div>
+                </div>
+                <div class="card-value" id="iosIssues">55.2%</div>
+                <div class="card-change change-critical">⚠️ Critical Issues</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-header">
+                    <div class="card-title">Platform Gap</div>
+                    <div class="card-icon icon-warning">📱</div>
+                </div>
+                <div class="card-value" id="platformGap">1.89★</div>
+                <div class="card-change change-critical">⬇️ iOS vs Android</div>
+            </div>
+
+            <div class="summary-card">
+                <div class="card-header">
+                    <div class="card-title">Market Leader</div>
+                    <div class="card-icon icon-success">🏆</div>
+                </div>
+                <div class="card-value" id="topRating">4.49★</div>
+                <div class="card-change change-positive">▲ Bitdefender</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="analytics-section">
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">📊 Google Play Performance</h2>
+                <canvas id="googleChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <div class="chart-alert">CRISIS</div>
+                <h2 class="chart-title">🍎 Apple Store Performance</h2>
+                <canvas id="appleChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+
+        <div class="chart-container chart-large">
+            <h2 class="chart-title">📈 Platform Comparison Analysis</h2>
+            <canvas id="comparisonChart" width="800" height="350"></canvas>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Antivirus Market Intelligence | Platform Analytics</p>
+        <p>87,730 Reviews Analyzed | iOS Crisis Identified | Strategic Opportunities Available</p>
+    </footer>
+
+    <script>
+        const colors = {
+            bitdefender: '#38a169',
+            norton: '#1a365d', 
+            mcafee: '#ed8936',
+            success: '#38a169',
+            danger: '#e53e3e',
+            warning: '#ed8936'
+        };
+
+        // Google Play Chart
+        const googleCtx = document.getElementById('googleChart').getContext('2d');
+        new Chart(googleCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Bitdefender', 'Norton 360', 'McAfee AV', 'McAfee Total'],
+                datasets: [{
+                    data: [4.49, 4.35, 3.16, 3.91],
+                    backgroundColor: [colors.bitdefender, colors.norton, colors.mcafee, colors.warning],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, max: 5 } },
+                plugins: { legend: { display: false } }
             }
         });
 
-        // Animate key metrics
+        // Apple Store Chart
+        const appleCtx = document.getElementById('appleChart').getContext('2d');
+        new Chart(appleCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Bitdefender', 'Norton 360', 'McAfee Total'],
+                datasets: [{
+                    data: [3.17, 2.53, 2.28],
+                    backgroundColor: [colors.warning, colors.danger, '#c53030'],
+                    borderRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                scales: { y: { beginAtZero: true, max: 5 } },
+                plugins: { legend: { display: false } }
+            }
+        });
+
+        // Platform Comparison Chart
+        const comparisonCtx = document.getElementById('comparisonChart').getContext('2d');
+        new Chart(comparisonCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Bitdefender', 'Norton 360', 'McAfee Portfolio'],
+                datasets: [
+                    {
+                        label: 'Android Rating',
+                        data: [4.49, 4.35, 3.39],
+                        backgroundColor: colors.success
+                    },
+                    {
+                        label: 'iOS Rating',
+                        data: [3.17, 2.53, 2.28],
+                        backgroundColor: colors.danger
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: { y: { beginAtZero: true, max: 5 } },
+                plugins: { legend: { position: 'top' } }
+            }
+        });
+
+        // Animate numbers
         function animateNumbers() {
             const stats = [
                 { id: 'totalReviews', target: 87730 },
                 { id: 'iosIssues', target: 55.2, suffix: '%' },
                 { id: 'platformGap', target: 1.89, suffix: '★' },
-                { id: 'topRating', target: 4.46, suffix: '★' }
+                { id: 'topRating', target: 4.49, suffix: '★' }
             ];
 
             stats.forEach(stat => {
                 const element = document.getElementById(stat.id);
                 if (element) {
-                    const target = stat.target;
-                    const suffix = stat.suffix || '';
                     let current = 0;
-                    const increment = target / 100;
+                    const increment = stat.target / 100;
                     
                     const timer = setInterval(() => {
                         current += increment;
-                        if (current >= target) {
-                            current = target;
+                        if (current >= stat.target) {
+                            current = stat.target;
                             clearInterval(timer);
                         }
                         
                         if (stat.id === 'totalReviews') {
-                            element.textContent = Math.floor(current).toLocaleString() + suffix;
+                            element.textContent = Math.floor(current).toLocaleString();
                         } else {
-                            element.textContent = current.toFixed(2) + suffix;
+                            element.textContent = current.toFixed(2) + (stat.suffix || '');
                         }
                     }, 30);
                 }
