@@ -1,0 +1,40 @@
+title: Antivirus Market Intelligence
+description: AI-Powered Consumer Security Analytics | 200K+ Reviews Analysis
+url: "https://yvh1223.github.io"
+baseurl: "/antivirus-market-intelligence"
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+theme: minima
+
+# Jekyll plugins
+plugins:
+  - jekyll-feed
+  - jekyll-sitemap
+  - jekyll-seo-tag
+
+# Exclude from processing
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor/bundle/
+  - vendor/cache/
+  - vendor/gems/
+  - vendor/ruby/
+  - src/
+  - config/
+  - requirements.txt
+
+# Site settings
+author: "Antivirus Market Intelligence Team"
+email: "analytics@antivirus-intelligence.com"
+github_username: yvh1223
+
+# Analytics
+google_analytics: # Add your GA tracking ID here
+
+# SEO settings
+lang: en_US
+timezone: America/New_York
