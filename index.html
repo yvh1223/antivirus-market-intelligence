@@ -1,140 +1,4 @@
-                    }
-                }
-            }
-        });
-
-        // Platform Performance Crisis Chart
-        const platformCtx = document.getElementById('platformChart').getContext('2d');
-        new Chart(platformCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Google Play Store\n(87,368 reviews)', 'Apple App Store\n(1,500 reviews)'],
-                datasets: [
-                    {
-                        label: 'Average Rating',
-                        data: [4.19, 2.60],
-                        backgroundColor: [corporateColors.success, corporateColors.danger],
-                        borderRadius: 6,
-                        yAxisID: 'y'
-                    },
-                    {
-                        label: 'Critical Issues Rate (%)',
-                        data: [16.4, 56.7],
-                        backgroundColor: [corporateColors.warning + '80', corporateColors.critical],
-                        borderRadius: 6,
-                        yAxisID: 'y1'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                scales: {
-                    y: {
-                        type: 'linear',
-                        display: true,
-                        position: 'left',
-                        max: 5,
-                        title: { display: true, text: 'Rating (Stars)' }
-                    },
-                    y1: {
-                        type: 'linear',
-                        display: true,
-                        position: 'right',
-                        max: 60,
-                        title: { display: true, text: 'Critical Issues (%)' },
-                        grid: { drawOnChartArea: false }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'top' }
-                }
-            }
-        });
-
-        // AI Processing Status Chart - Real Data
-        const processingCtx = document.getElementById('processingChart').getContext('2d');
-        new Chart(processingCtx, {
-            type: 'bar',
-            data: {
-                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
-                datasets: [
-                    {
-                        label: 'Bitdefender - AI Processed',
-                        data: [58, 80, 6031, 6672, 7167, 3074],
-                        backgroundColor: corporateColors.bitdefender,
-                        stack: 'bitdefender'
-                    },
-                    {
-                        label: 'Bitdefender - Unprocessed', 
-                        data: [0, 0, 889, 0, 0, 0],
-                        backgroundColor: corporateColors.bitdefender + '40',
-                        stack: 'bitdefender'
-                    },
-                    {
-                        label: 'Norton - AI Processed',
-                        data: [0, 0, 1, 1, 12627, 6694],
-                        backgroundColor: corporateColors.norton,
-                        stack: 'norton'
-                    },
-                    {
-                        label: 'Norton - Unprocessed',
-                        data: [0, 0, 14303, 13795, 2329, 0],
-                        backgroundColor: corporateColors.norton + '40',
-                        stack: 'norton'
-                    },
-                    {
-                        label: 'McAfee - All Processed',
-                        data: [0, 0, 6856, 3687, 3179, 1425],
-                        backgroundColor: corporateColors.warning,
-                        stack: 'mcafee'
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { stacked: true },
-                    y: { 
-                        stacked: true,
-                        title: { display: true, text: 'Review Volume' }
-                    }
-                },
-                plugins: {
-                    legend: { position: 'top' },
-                    tooltip: {
-                        mode: 'index',
-                        intersect: false
-                    }
-                }
-            }
-        });
-
-        // Competitive Rating Analysis
-        const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
-        new Chart(ratingsCtx, {
-            type: 'line',
-            data: {
-                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
-                datasets: [
-                    {
-                        label: 'Bitdefender Total Security',
-                        data: [1.79, 3.05, 4.48, 4.48, 4.47, 4.45],
-                        borderColor: corporateColors.bitdefender,
-                        backgroundColor: corporateColors.bitdefender + '20',
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 5
-                    },
-                    {
-                        label: 'Norton 360', 
-                        data: [null, null, 4.39, 4.34, 4.33, 4.17],
-                        borderColor: corporateColors.norton,
-                        backgroundColor: corporateColors.norton + '20',
-                        tension: 0.4,
-                        borderWidth: 3,
-                        pointRadius: 5
+5
                     },
                     {
                         label: 'McAfee AntiVirus Plus',
@@ -224,24 +88,26 @@
 
             stats.forEach(stat => {
                 const element = document.getElementById(stat.id);
-                const target = stat.target;
-                const suffix = stat.suffix || '';
-                let current = 0;
-                const increment = target / 100;
-                
-                const timer = setInterval(() => {
-                    current += increment;
-                    if (current >= target) {
-                        current = target;
-                        clearInterval(timer);
-                    }
+                if (element) {
+                    const target = stat.target;
+                    const suffix = stat.suffix || '';
+                    let current = 0;
+                    const increment = target / 100;
                     
-                    if (stat.id === 'totalReviews') {
-                        element.textContent = Math.floor(current).toLocaleString() + suffix;
-                    } else {
-                        element.textContent = current.toFixed(stat.id === 'topRating' ? 2 : 1) + suffix;
-                    }
-                }, 30);
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= target) {
+                            current = target;
+                            clearInterval(timer);
+                        }
+                        
+                        if (stat.id === 'totalReviews') {
+                            element.textContent = Math.floor(current).toLocaleString() + suffix;
+                        } else {
+                            element.textContent = current.toFixed(stat.id === 'topRating' ? 2 : 1) + suffix;
+                        }
+                    }, 30);
+                }
             });
         }
 
