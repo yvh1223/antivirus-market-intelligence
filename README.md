@@ -33,21 +33,21 @@ python progress_monitor.py
 
 ## 📊 Data Collection
 
-### Supported Products
+### Supported Products - Complete Platform Coverage
 
 | Product | Apple Store ID | Google Play ID |
 |---------|----------------|----------------|
-| **Norton 360** | `724596345` | `com.symantec.mobilesecurity` |
-| **McAfee Total Protection** | `520234411` | `com.wsandroid.suite` |
-| **Bitdefender Total Security** | `1127716399` | `com.bitdefender.security` |
-| **Kaspersky Internet Security** | `1430738996` | `com.kms.free` |
-| **AVG AntiVirus** | `519235025` | `com.antivirus` |
-| **Avast Free Antivirus** | `793096595` | `com.avast.android.mobilesecurity` |
-| **ESET Internet Security** | `1091665828` | `com.eset.ems2.gp` |
-| **Trend Micro Maximum Security** | `1006214921` | `com.trendmicro.tmmms` |
-| **Malwarebytes Premium** | `1327105431` | `org.malwarebytes.antimalware` |
-| **F-Secure SAFE** | `771097804` | `com.fsecure.ms.dc` |
-| **Sophos Intercept X** | `1168395491` | `com.sophos.smsec` |
+| **Norton 360 (Antivirus & VPN)** | `1278474169` | `com.symantec.mobilesecurity` |
+| **McAfee Security (Privacy & VPN)** | `724596345` | `com.wsandroid.suite` |
+| **Bitdefender Mobile Security** | `1255893012` | `com.bitdefender.security` |
+| **VPN & Security by Kaspersky** | `1089969624` | `com.kms.free` |
+| **AVG Mobile Security** | `1473934066` | `com.antivirus` |
+| **Avast Security & Privacy** | `1276551855` | `com.avast.android.mobilesecurity` |
+| **ESET HOME** | `1533672833` | `com.eset.ems2.gp` |
+| **Trend Micro Mobile Security** | `630442428` | `com.trendmicro.tmmms` |
+| **Malwarebytes Mobile Security** | `1327105431` | `org.malwarebytes.antimalware` |
+| **F-Secure Mobile Security** | `434893913` | `com.fsecure.ms.dc` |
+| **Sophos Intercept X for Mobile** | `1086924662` | `com.sophos.smsec` |
 
 ### Collection Flow
 
@@ -67,53 +67,121 @@ graph TD
     H --> I[✅ Data Ready for AI Processing]
 ```
 
-### Quick Collection Commands
+### Complete Cross-Platform Collection
 
 **Collect All Products (Both Platforms):**
 ```bash
 python -c "
 from src.enhanced_wrapper import fetch
 
-# All major products
-products = [
-    ('Norton 360', 'NorTech', '724596345', 'com.symantec.mobilesecurity'),
-    ('McAfee Total Protection', 'McAfee', '520234411', 'com.wsandroid.suite'),
-    ('Bitdefender Total Security', 'Bitdefender', '1127716399', 'com.bitdefender.security')
+# All major antivirus products with correct Apple Store IDs
+all_products = [
+    ('Norton 360', 'NorTech (Broadcom)', '1278474169', 'com.symantec.mobilesecurity'),
+    ('McAfee Total Protection', 'McAfee', '724596345', 'com.wsandroid.suite'),
+    ('Bitdefender Total Security', 'Bitdefender', '1255893012', 'com.bitdefender.security'),
+    ('Kaspersky Internet Security', 'Kaspersky', '1089969624', 'com.kms.free'),
+    ('AVG AntiVirus', 'AVG (Avast)', '1473934066', 'com.antivirus'),
+    ('Avast Free Antivirus', 'Avast', '1276551855', 'com.avast.android.mobilesecurity'),
+    ('ESET Internet Security', 'ESET', '1533672833', 'com.eset.ems2.gp'),
+    ('Trend Micro Maximum Security', 'Trend Micro', '630442428', 'com.trendmicro.tmmms'),
+    ('Malwarebytes Premium', 'Malwarebytes', '1327105431', 'org.malwarebytes.antimalware'),
+    ('F-Secure SAFE', 'F-Secure', '434893913', 'com.fsecure.ms.dc'),
+    ('Sophos Intercept X', 'Sophos', '1086924662', 'com.sophos.smsec')
 ]
 
-for name, company, apple_id, google_id in products:
-    print(f'🔄 Collecting {name}...')
+print('🌐 COMPLETE CROSS-PLATFORM DATA EXTRACTION')
+print('=' * 60)
+grand_total = 0
+
+for product_name, company, apple_id, google_id in all_products:
+    print(f'🛡️ {product_name} by {company}')
     
     # Apple Store
-    apple = fetch('apple', apple_id, max_reviews=5000, product_name=name, company=company)
+    apple_result = fetch('apple', apple_id, max_reviews=5000, 
+                         product_name=product_name, company=company, country='us')
+    apple_count = apple_result['reviews_collected']
     
     # Google Play
-    google = fetch('google', google_id, max_reviews=10000, product_name=name, company=company)
+    google_result = fetch('google', google_id, max_reviews=10000, 
+                          product_name=product_name, company=company, country='us')
+    google_count = google_result['reviews_collected']
     
-    total = apple['reviews_collected'] + google['reviews_collected']
-    print(f'✅ {name}: {total:,} reviews collected')
+    product_total = apple_count + google_count
+    grand_total += product_total
+    
+    print(f'   📱 Apple: {apple_count:,} | 🤖 Google: {google_count:,} | 🎯 Total: {product_total:,}')
+
+print(f'🏆 GRAND TOTAL: {grand_total:,} reviews collected across all products and platforms')
 "
 ```
 
-**Single Product Collection:**
+### Individual Product Collection Examples
+
+**Norton 360:**
 ```bash
-# Example: Norton 360
 python -c "
 from src.enhanced_wrapper import fetch
 
-# Apple Store
-apple = fetch('apple', '724596345', max_reviews=5000, 
-              product_name='Norton 360', company='NorTech')
+# Norton 360 with correct Apple Store ID
+print('🔄 Collecting Norton 360...')
 
-# Google Play  
+# Apple Store (Updated ID)
+apple = fetch('apple', '1278474169', max_reviews=5000, 
+              product_name='Norton 360', company='NorTech (Broadcom)')
+
+# Google Play
 google = fetch('google', 'com.symantec.mobilesecurity', max_reviews=10000,
-               product_name='Norton 360', company='NorTech')
+               product_name='Norton 360', company='NorTech (Broadcom)')
 
-print(f'Norton 360 Total: {apple[\"reviews_collected\"] + google[\"reviews_collected\"]:,} reviews')
+total = apple['reviews_collected'] + google['reviews_collected']
+print(f'✅ Norton 360 Total: {total:,} reviews collected')
 "
 ```
 
-**Verify Collection:**
+**McAfee Security:**
+```bash
+python -c "
+from src.enhanced_wrapper import fetch
+
+# McAfee with correct Apple Store ID
+print('🔄 Collecting McAfee Security...')
+
+# Apple Store
+apple = fetch('apple', '724596345', max_reviews=5000, 
+              product_name='McAfee Total Protection', company='McAfee')
+
+# Google Play
+google = fetch('google', 'com.wsandroid.suite', max_reviews=10000,
+               product_name='McAfee Total Protection', company='McAfee')
+
+total = apple['reviews_collected'] + google['reviews_collected']
+print(f'✅ McAfee Total: {total:,} reviews collected')
+"
+```
+
+**Bitdefender Mobile Security:**
+```bash
+python -c "
+from src.enhanced_wrapper import fetch
+
+# Bitdefender with correct Apple Store ID
+print('🔄 Collecting Bitdefender Mobile Security...')
+
+# Apple Store
+apple = fetch('apple', '1255893012', max_reviews=5000, 
+              product_name='Bitdefender Total Security', company='Bitdefender')
+
+# Google Play
+google = fetch('google', 'com.bitdefender.security', max_reviews=10000,
+               product_name='Bitdefender Total Security', company='Bitdefender')
+
+total = apple['reviews_collected'] + google['reviews_collected']
+print(f'✅ Bitdefender Total: {total:,} reviews collected')
+"
+```
+
+### Verify Collection Results
+
 ```bash
 python -c "
 from supabase import create_client
@@ -123,21 +191,76 @@ from dotenv import load_dotenv
 load_dotenv()
 supabase = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_ANON_KEY'))
 
-# Check total reviews
-result = supabase.table('reviews').select('id', count='exact').execute()
-print(f'📊 Total Reviews in Database: {result.count:,}')
+print('📊 DATA COLLECTION VERIFICATION')
+print('=' * 50)
+
+# Get all products and their review counts
+products = supabase.table('products').select('id, name, company').execute().data
+total_reviews = 0
+
+for product in products.data:
+    count_result = supabase.table('reviews').select('id', count='exact').eq('product_id', product['id']).execute()
+    count = count_result.count
+    total_reviews += count
+    
+    if count > 0:
+        print(f'✅ {product[\"name\"]} by {product[\"company\"]}: {count:,} reviews')
+
+print(f'🎯 TOTAL REVIEWS IN DATABASE: {total_reviews:,}')
 
 # Platform breakdown
-platforms = supabase.table('platforms').select('*').execute()
-for platform in platforms.data:
-    count = supabase.table('reviews').select('id', count='exact').eq('platform_id', platform['id']).execute()
-    print(f'📱 {platform[\"display_name\"]}: {count.count:,} reviews')
+platforms_result = supabase.table('platforms').select('id, display_name').execute()
+for platform in platforms_result.data:
+    platform_count = supabase.table('reviews').select('id', count='exact').eq('platform_id', platform['id']).execute()
+    print(f'📱 {platform[\"display_name\"]}: {platform_count.count:,} reviews')
 "
 ```
 
 ---
 
 ## 🤖 AI Processing
+
+### Parallel Processing by Product (Recommended)
+
+Process reviews efficiently using the parallel processor:
+
+```bash
+# Process specific products in parallel (run in separate terminals for maximum speed)
+python parallel_processor.py
+
+# Available options:
+# 1. Norton
+# 2. Bitdefender  
+# 3. Kaspersky
+# 4. AVG
+# 5. Avast
+# 6. ESET
+# 7. Trend Micro
+# 8. Malwarebytes
+
+# Processing size options:
+# 1. Test run (250 reviews) - ~10 minutes
+# 2. Small run (1,000 reviews) - ~30 minutes  
+# 3. Medium run (5,000 reviews) - ~2-3 hours
+# 4. Large run (25,000 reviews) - ~10-12 hours
+# 5. Full processing (all reviews for that product) - varies by product size
+```
+
+### Multi-Terminal Processing (Fastest)
+
+```bash
+# Terminal 1: Process Norton reviews
+python parallel_processor.py
+# Choose: 1 (Norton) → 5 (Full processing)
+
+# Terminal 2: Process McAfee reviews  
+python parallel_processor.py
+# Choose: 2 (Bitdefender) → 5 (Full processing)
+
+# Terminal 3: Process Bitdefender reviews
+python parallel_processor.py
+# Choose: 3 (Kaspersky) → 5 (Full processing)
+```
 
 ### Processing Flow
 
@@ -167,44 +290,8 @@ graph TD
     M --> C
 ```
 
-### Processing Commands
+### Monitor Progress
 
-**Start AI Processing (Recommended):**
-```bash
-# Interactive processor with product selection
-python parallel_processor.py
-
-# Options:
-# 1. Norton
-# 2. Bitdefender  
-# 3. Kaspersky
-# 4. AVG
-# 5. Avast
-# 6. ESET
-# 7. Trend Micro
-# 8. Malwarebytes
-
-# Size options:
-# 1. Test (250 reviews) - ~10 minutes
-# 2. Small (1,000 reviews) - ~30 minutes  
-# 3. Medium (5,000 reviews) - ~2-3 hours
-# 4. Large (25,000 reviews) - ~10-12 hours
-# 5. Full (all reviews) - varies by product
-```
-
-**Multi-Terminal Processing (Fastest):**
-```bash
-# Terminal 1
-python parallel_processor.py  # Choose Norton → Full processing
-
-# Terminal 2  
-python parallel_processor.py  # Choose McAfee → Full processing
-
-# Terminal 3
-python parallel_processor.py  # Choose Bitdefender → Full processing
-```
-
-**Monitor Progress:**
 ```bash
 # Real-time monitoring
 python progress_monitor.py
@@ -360,9 +447,8 @@ cp .env.template .env
 
 **Step 2: Collect Data**
 ```bash
-# Choose one approach:
-python -c "from src.enhanced_wrapper import fetch; ..."  # Manual
-# OR use the collection scripts from Data Collection section
+# Use the collection scripts from Data Collection section
+# All Apple Store IDs have been updated with correct values
 ```
 
 **Step 3: Process with AI**
