@@ -1,772 +1,225 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Antivirus Market Intelligence | Executive Dashboard</title>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-navy: #1a365d;
-            --secondary-blue: #2d5986;
-            --accent-gold: #f6ad55;
-            --success-green: #38a169;
-            --warning-orange: #ed8936;
-            --danger-red: #e53e3e;
-            --neutral-gray: #4a5568;
-            --light-gray: #f7fafc;
-            --border-gray: #e2e8f0;
-            --text-dark: #2d3748;
-            --text-light: #718096;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 100%);
-            color: var(--text-dark);
-            line-height: 1.6;
-        }
-
-        .header {
-            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%);
-            color: white;
-            padding: 3rem 0;
-            text-align: center;
-            box-shadow: 0 4px 20px rgba(26, 54, 93, 0.15);
-        }
-
-        .header h1 {
-            font-size: 2.75rem;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-            letter-spacing: -0.02em;
-        }
-
-        .header .subtitle {
-            font-size: 1.1rem;
-            font-weight: 400;
-            opacity: 0.9;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        .nav-menu {
-            background: rgba(255, 255, 255, 0.1);
-            padding: 1rem 0;
-            text-align: center;
-            margin-top: 1rem;
-        }
-        
-        .nav-menu a {
-            color: white;
-            text-decoration: none;
-            margin: 0 1.5rem;
-            padding: 0.6rem 1.2rem;
-            border-radius: 8px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-block;
-        }
-        
-        .nav-menu a:hover {
-            background: rgba(255, 255, 255, 0.2);
-            transform: translateY(-1px);
-        }
-
-        .executive-summary {
-            max-width: 1200px;
-            margin: 3rem auto;
-            padding: 0 2rem;
-        }
-
-        .summary-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .summary-card {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-gray);
-            transition: all 0.3s ease;
-        }
-
-        .summary-card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-        }
-
-        .card-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            margin-bottom: 1rem;
-        }
-
-        .card-title {
-            font-size: 0.9rem;
-            font-weight: 600;
-            color: var(--text-light);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
-
-        .card-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: 8px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.2rem;
-        }
-
-        .icon-primary { background: linear-gradient(135deg, var(--primary-navy), var(--secondary-blue)); color: white; }
-        .icon-success { background: linear-gradient(135deg, var(--success-green), #48bb78); color: white; }
-        .icon-warning { background: linear-gradient(135deg, var(--warning-orange), var(--accent-gold)); color: white; }
-        .icon-info { background: linear-gradient(135deg, #4299e1, #63b3ed); color: white; }
-
-        .card-value {
-            font-size: 2.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 0.5rem;
-        }
-
-        .card-change {
-            font-size: 0.85rem;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 0.3rem;
-        }
-
-        .change-positive { color: var(--success-green); }
-        .change-negative { color: var(--danger-red); }
-        .change-neutral { color: var(--neutral-gray); }
-
-        .analytics-section {
-            max-width: 1400px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        .charts-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 2rem;
-            margin-bottom: 3rem;
-        }
-
-        .chart-container {
-            background: white;
-            padding: 2rem;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-gray);
-        }
-
-        .chart-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .chart-large {
-            grid-column: span 2;
-            height: 450px;
-        }
-
-        .insights-section {
-            background: white;
-            border-radius: 12px;
-            padding: 3rem;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            border: 1px solid var(--border-gray);
-            margin-top: 3rem;
-        }
-
-        .insights-title {
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--text-dark);
-            margin-bottom: 2rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .competitive-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .competitor-card {
-            background: var(--light-gray);
-            padding: 1.5rem;
-            border-radius: 10px;
-            border-left: 4px solid var(--primary-navy);
-        }
-
-        .competitor-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--text-dark);
-            margin-bottom: 1rem;
-        }
-
-        .competitor-metrics {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-bottom: 1rem;
-        }
-
-        .metric-item {
-            text-align: center;
-        }
-
-        .metric-value {
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--primary-navy);
-        }
-
-        .metric-label {
-            font-size: 0.8rem;
-            color: var(--text-light);
-            margin-top: 0.2rem;
-        }
-
-        .competitor-insight {
-            font-size: 0.9rem;
-            color: var(--text-light);
-            line-height: 1.5;
-        }
-
-        .data-source {
-            background: #f0f7ff;
-            border: 1px solid #bde7ff;
-            border-radius: 8px;
-            padding: 1rem;
-            margin: 2rem 0;
-            font-size: 0.9rem;
-            color: var(--primary-navy);
-        }
-
-        .footer {
-            background: var(--primary-navy);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-            margin-top: 4rem;
-        }
-
-        @media (max-width: 768px) {
-            .charts-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .chart-large {
-                grid-column: span 1;
-                height: 350px;
-            }
-            
-            .header h1 {
-                font-size: 2rem;
-            }
-            
-            .summary-cards {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
-</head>
-<body>
-    <header class="header">
-        <h1>Antivirus Market Intelligence</h1>
-        <p class="subtitle">AI-Powered Consumer Security Analytics Dashboard</p>
-        <div class="data-source">
-            <strong>Data Sources:</strong> Google Play Store & Apple App Store | 
-            <strong>Coverage:</strong> 200K+ Reviews (2021-2025) | 
-            <strong>AI Analysis:</strong> OpenAI GPT-4o-mini Processing
-        </div>
-        <nav class="nav-menu">
-            <a href="index.html">📊 Executive Dashboard</a>
-            <a href="advanced.html">🔬 Advanced Analytics</a>
-            <a href="data-explorer.html">🔍 Data Explorer</a>
-            <a href="methodology.html">📖 Methodology</a>
-            <a href="https://github.com/yvh1223/antivirus-market-intelligence">📖 GitHub</a>
-        </nav>
-    </header>
-
-    <div class="executive-summary">
-        <div class="summary-cards">
-            <div class="summary-card">
-                <div class="card-header">
-                    <div class="card-title">Total Reviews Analyzed</div>
-                    <div class="card-icon icon-primary">📊</div>
-                </div>
-                <div class="card-value" id="totalReviews">200,272</div>
-                <div class="card-change change-positive">
-                    ▲ 15.3% vs previous period
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="card-header">
-                    <div class="card-title">AI Processing Rate</div>
-                    <div class="card-icon icon-success">🤖</div>
-                </div>
-                <div class="card-value" id="aiProcessed">29.4%</div>
-                <div class="card-change change-positive">
-                    ▲ 58,991 reviews processed
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="card-header">
-                    <div class="card-title">AI Confidence Score</div>
-                    <div class="card-icon icon-warning">🎯</div>
-                </div>
-                <div class="card-value" id="avgConfidence">83.2%</div>
-                <div class="card-change change-positive">
-                    ▲ Excellent accuracy rating
-                </div>
-            </div>
-
-            <div class="summary-card">
-                <div class="card-header">
-                    <div class="card-title">Market Coverage</div>
-                    <div class="card-icon icon-info">🌐</div>
-                </div>
-                <div class="card-value" id="platforms">2</div>
-                <div class="card-change change-neutral">
-                    Google Play + Apple App Store
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div class="analytics-section">
-        <div class="charts-grid">
-            <div class="chart-container">
-                <h2 class="chart-title">📊 Market Share by Review Volume</h2>
-                <canvas id="marketShareChart" width="400" height="300"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h2 class="chart-title">⭐ Average Ratings Comparison</h2>
-                <canvas id="ratingsChart" width="400" height="300"></canvas>
-            </div>
-        </div>
-
-        <div class="chart-container chart-large">
-            <h2 class="chart-title">📈 Review Volume & Rating Trends (2021-2025)</h2>
-            <canvas id="trendsChart" width="800" height="350"></canvas>
-        </div>
-
-        <div class="charts-grid">
-            <div class="chart-container">
-                <h2 class="chart-title">🎯 Sentiment Distribution</h2>
-                <canvas id="sentimentChart" width="400" height="300"></canvas>
-            </div>
-
-            <div class="chart-container">
-                <h2 class="chart-title">📱 Platform Performance</h2>
-                <canvas id="platformChart" width="400" height="300"></canvas>
-            </div>
-        </div>
-    </div>
-
-    <div class="insights-section">
-        <h2 class="insights-title">🔍 Executive Market Intelligence</h2>
-        
-        <div class="competitive-grid">
-            <div class="competitor-card">
-                <div class="competitor-name">🥇 Bitdefender Total Security</div>
-                <div class="competitor-metrics">
-                    <div class="metric-item">
-                        <div class="metric-value">4.47</div>
-                        <div class="metric-label">Rating</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">23,971</div>
-                        <div class="metric-label">Reviews</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">100%</div>
-                        <div class="metric-label">AI Processed</div>
-                    </div>
-                </div>
-                <div class="competitor-insight">
-                    <strong>Market Position:</strong> Premium leader with consistently high ratings and strong performance feedback. Demonstrates customer satisfaction leadership in the security software market.
-                </div>
-            </div>
-
-            <div class="competitor-card">
-                <div class="competitor-name">🥈 Norton 360</div>
-                <div class="competitor-metrics">
-                    <div class="metric-item">
-                        <div class="metric-value">4.31</div>
-                        <div class="metric-label">Rating</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">49,750</div>
-                        <div class="metric-label">Reviews</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">34%</div>
-                        <div class="metric-label">AI Processed</div>
-                    </div>
-                </div>
-                <div class="competitor-insight">
-                    <strong>Market Position:</strong> Volume leader with largest market presence and established brand trust. Recent slight rating decline (-0.08) indicates potential competitive pressure.
-                </div>
-            </div>
-
-            <div class="competitor-card">
-                <div class="competitor-name">🥉 McAfee Portfolio</div>
-                <div class="competitor-metrics">
-                    <div class="metric-item">
-                        <div class="metric-value">3.13</div>
-                        <div class="metric-label">Avg Rating</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">15,147</div>
-                        <div class="metric-label">Total Reviews</div>
-                    </div>
-                    <div class="metric-item">
-                        <div class="metric-value">100%</div>
-                        <div class="metric-label">AI Processed</div>
-                    </div>
-                </div>
-                <div class="competitor-insight">
-                    <strong>Market Position:</strong> Value segment with improvement opportunities. Shows positive trend (+0.15) indicating recovery from historical performance challenges.
-                </div>
-            </div>
-        </div>
-
-        <div style="margin-top: 2rem; padding: 1.5rem; background: #f8fafc; border-radius: 8px; border-left: 4px solid var(--primary-navy);">
-            <h3 style="color: var(--text-dark); margin-bottom: 1rem;">🎯 Strategic Insights</h3>
-            <ul style="color: var(--text-light); line-height: 1.7;">
-                <li><strong>Platform Differentiation:</strong> iOS users rate antivirus apps 10.5% higher than Android users (4.2 vs 3.8 average), suggesting platform-specific optimization opportunities.</li>
-                <li><strong>Market Consolidation:</strong> Top 3 players control 87.8% of review volume, indicating a mature, concentrated market with high barriers to entry.</li>
-                <li><strong>AI Processing ROI:</strong> 83.2% confidence score in sentiment analysis provides reliable insights for strategic decision-making across 58,991 processed reviews.</li>
-                <li><strong>Competitive Moat:</strong> Bitdefender's 4.47 rating vs 3.13 industry average demonstrates significant quality differentiation and premium positioning success.</li>
-            </ul>
-        </div>
-    </div>
-
-    <footer class="footer">
-        <p>&copy; 2025 Antivirus Market Intelligence | AI-Powered Executive Analytics</p>
-        <p>Data Processing: OpenAI GPT-4o-mini | Coverage: Google Play Store & Apple App Store</p>
-    </footer>
-
-    <script>
-        // Professional chart configurations with corporate color scheme
-        const corporateColors = {
-            primary: '#1a365d',
-            secondary: '#2d5986', 
-            success: '#38a169',
-            warning: '#ed8936',
-            danger: '#e53e3e',
-            info: '#4299e1',
-            neutral: '#718096'
-        };
-
-        // Market Share Chart
-        const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
-        new Chart(marketShareCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee Products', 'Others'],
-                datasets: [{
-                    data: [49750, 23971, 15147, 11404],
-                    backgroundColor: [
-                        corporateColors.primary,
-                        corporateColors.success,
-                        corporateColors.warning,
-                        corporateColors.neutral
-                    ],
-                    borderWidth: 0,
-                    cutout: '65%'
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            padding: 20,
-                            font: {
-                                size: 12,
-                                family: 'Inter'
-                            },
-                            usePointStyle: true
-                        }
                     }
                 }
             }
         });
 
-        // Ratings Comparison Chart
-        const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
-        new Chart(ratingsCtx, {
+        // Platform Performance Crisis Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        new Chart(platformCtx, {
             type: 'bar',
             data: {
-                labels: ['Bitdefender\nTotal Security', 'Norton\n360', 'McAfee\nAntiVirus Plus', 'McAfee\nTotal Protection'],
-                datasets: [{
-                    label: 'Average Rating',
-                    data: [4.47, 4.31, 3.27, 2.99],
-                    backgroundColor: [
-                        corporateColors.success,
-                        corporateColors.primary,
-                        corporateColors.warning,
-                        corporateColors.danger
-                    ],
-                    borderRadius: 4,
-                    borderSkipped: false,
-                }]
+                labels: ['Google Play Store\n(87,368 reviews)', 'Apple App Store\n(1,500 reviews)'],
+                datasets: [
+                    {
+                        label: 'Average Rating',
+                        data: [4.19, 2.60],
+                        backgroundColor: [corporateColors.success, corporateColors.danger],
+                        borderRadius: 6,
+                        yAxisID: 'y'
+                    },
+                    {
+                        label: 'Critical Issues Rate (%)',
+                        data: [16.4, 56.7],
+                        backgroundColor: [corporateColors.warning + '80', corporateColors.critical],
+                        borderRadius: 6,
+                        yAxisID: 'y1'
+                    }
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 scales: {
                     y: {
-                        beginAtZero: true,
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
                         max: 5,
-                        ticks: {
-                            stepSize: 0.5,
-                            font: {
-                                family: 'Inter'
-                            }
-                        },
-                        grid: {
-                            color: '#e2e8f0'
-                        }
+                        title: { display: true, text: 'Rating (Stars)' }
                     },
-                    x: {
-                        ticks: {
-                            font: {
-                                family: 'Inter',
-                                size: 11
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        max: 60,
+                        title: { display: true, text: 'Critical Issues (%)' },
+                        grid: { drawOnChartArea: false }
                     }
                 },
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { position: 'top' }
                 }
             }
         });
 
-        // Trends Chart - Professional Time Series
-        const trendsCtx = document.getElementById('trendsChart').getContext('2d');
-        new Chart(trendsCtx, {
-            type: 'line',
+        // AI Processing Status Chart - Real Data
+        const processingCtx = document.getElementById('processingChart').getContext('2d');
+        new Chart(processingCtx, {
+            type: 'bar',
             data: {
-                labels: ['2021', '2022', '2023', '2024', '2025'],
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
                 datasets: [
                     {
-                        label: 'Bitdefender Total Security',
-                        data: [80, 6920, 6672, 7167, 3074],
-                        borderColor: corporateColors.success,
-                        backgroundColor: corporateColors.success + '20',
-                        tension: 0.4,
-                        fill: false,
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
+                        label: 'Bitdefender - AI Processed',
+                        data: [58, 80, 6031, 6672, 7167, 3074],
+                        backgroundColor: corporateColors.bitdefender,
+                        stack: 'bitdefender'
                     },
                     {
-                        label: 'Norton 360',
-                        data: [0, 14304, 13796, 14956, 6694],
-                        borderColor: corporateColors.primary,
-                        backgroundColor: corporateColors.primary + '20',
-                        tension: 0.4,
-                        fill: false,
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
+                        label: 'Bitdefender - Unprocessed', 
+                        data: [0, 0, 889, 0, 0, 0],
+                        backgroundColor: corporateColors.bitdefender + '40',
+                        stack: 'bitdefender'
                     },
                     {
-                        label: 'McAfee Products',
-                        data: [0, 6856, 3687, 3179, 1425],
-                        borderColor: corporateColors.warning,
-                        backgroundColor: corporateColors.warning + '20',
-                        tension: 0.4,
-                        fill: false,
-                        borderWidth: 3,
-                        pointRadius: 5,
-                        pointHoverRadius: 8
+                        label: 'Norton - AI Processed',
+                        data: [0, 0, 1, 1, 12627, 6694],
+                        backgroundColor: corporateColors.norton,
+                        stack: 'norton'
+                    },
+                    {
+                        label: 'Norton - Unprocessed',
+                        data: [0, 0, 14303, 13795, 2329, 0],
+                        backgroundColor: corporateColors.norton + '40',
+                        stack: 'norton'
+                    },
+                    {
+                        label: 'McAfee - All Processed',
+                        data: [0, 0, 6856, 3687, 3179, 1425],
+                        backgroundColor: corporateColors.warning,
+                        stack: 'mcafee'
                     }
                 ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
-                interaction: {
-                    intersect: false,
-                    mode: 'index'
-                },
                 scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            font: {
-                                family: 'Inter'
-                            }
-                        },
-                        grid: {
-                            color: '#e2e8f0'
-                        }
+                    x: { stacked: true },
+                    y: { 
+                        stacked: true,
+                        title: { display: true, text: 'Review Volume' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false
+                    }
+                }
+            }
+        });
+
+        // Competitive Rating Analysis
+        const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
+        new Chart(ratingsCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'Bitdefender Total Security',
+                        data: [1.79, 3.05, 4.48, 4.48, 4.47, 4.45],
+                        borderColor: corporateColors.bitdefender,
+                        backgroundColor: corporateColors.bitdefender + '20',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
                     },
-                    x: {
-                        ticks: {
-                            font: {
-                                family: 'Inter'
-                            }
-                        },
-                        grid: {
-                            color: '#e2e8f0'
-                        }
+                    {
+                        label: 'Norton 360', 
+                        data: [null, null, 4.39, 4.34, 4.33, 4.17],
+                        borderColor: corporateColors.norton,
+                        backgroundColor: corporateColors.norton + '20',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'McAfee AntiVirus Plus',
+                        data: [null, null, 3.22, 2.88, 3.28, 3.43],
+                        borderColor: corporateColors.warning,
+                        backgroundColor: corporateColors.warning + '20',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
                     }
-                },
-                plugins: {
-                    legend: {
-                        position: 'top',
-                        labels: {
-                            font: {
-                                family: 'Inter'
-                            },
-                            usePointStyle: true,
-                            padding: 20
-                        }
-                    }
-                }
-            }
-        });
-
-        // Sentiment Analysis Chart
-        const sentimentCtx = document.getElementById('sentimentChart').getContext('2d');
-        new Chart(sentimentCtx, {
-            type: 'pie',
-            data: {
-                labels: ['Positive', 'Negative', 'Neutral', 'Mixed'],
-                datasets: [{
-                    data: [86.9, 6.8, 3.5, 2.8],
-                    backgroundColor: [
-                        corporateColors.success,
-                        corporateColors.danger,
-                        corporateColors.info,
-                        corporateColors.warning
-                    ],
-                    borderWidth: 0
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: true,
-                plugins: {
-                    legend: {
-                        position: 'bottom',
-                        labels: {
-                            font: {
-                                family: 'Inter'
-                            },
-                            usePointStyle: true,
-                            padding: 15
-                        }
-                    }
-                }
-            }
-        });
-
-        // Platform Performance Chart
-        const platformCtx = document.getElementById('platformChart').getContext('2d');
-        new Chart(platformCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Google Play Store', 'Apple App Store'],
-                datasets: [{
-                    label: 'Average Rating',
-                    data: [3.8, 4.2],
-                    backgroundColor: [
-                        corporateColors.warning,
-                        corporateColors.success
-                    ],
-                    borderRadius: 6,
-                    borderSkipped: false,
-                }]
+                ]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: true,
                 scales: {
-                    y: {
-                        beginAtZero: true,
+                    y: { 
+                        min: 1,
                         max: 5,
-                        ticks: {
-                            stepSize: 0.5,
-                            font: {
-                                family: 'Inter'
-                            }
-                        },
-                        grid: {
-                            color: '#e2e8f0'
-                        }
-                    },
-                    x: {
-                        ticks: {
-                            font: {
-                                family: 'Inter'
-                            }
-                        },
-                        grid: {
-                            display: false
-                        }
+                        title: { display: true, text: 'Average Rating (Stars)' }
                     }
                 },
                 plugins: {
-                    legend: {
-                        display: false
-                    }
+                    legend: { position: 'bottom' }
                 }
             }
         });
 
-        // Animate numbers on load
+        // Market Position Matrix (Satisfaction vs Market Share)
+        const matrixCtx = document.getElementById('matrixChart').getContext('2d');
+        new Chart(matrixCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [
+                    {
+                        label: 'Bitdefender',
+                        data: [{x: 86.7, y: 27.0}],
+                        backgroundColor: corporateColors.bitdefender,
+                        pointRadius: 12,
+                        pointHoverRadius: 15
+                    },
+                    {
+                        label: 'Norton',
+                        data: [{x: 83.4, y: 56.0}],
+                        backgroundColor: corporateColors.norton,
+                        pointRadius: 12,
+                        pointHoverRadius: 15
+                    },
+                    {
+                        label: 'McAfee',
+                        data: [{x: 49.6, y: 17.0}],
+                        backgroundColor: corporateColors.warning,
+                        pointRadius: 12,
+                        pointHoverRadius: 15
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                scales: {
+                    x: { 
+                        title: { display: true, text: 'Customer Satisfaction (%)' },
+                        min: 40,
+                        max: 90
+                    },
+                    y: { 
+                        title: { display: true, text: 'Market Share (%)' },
+                        min: 10,
+                        max: 60
+                    }
+                },
+                plugins: {
+                    legend: { position: 'bottom' }
+                }
+            }
+        });
+
+        // Animate key metrics
         function animateNumbers() {
             const stats = [
-                { id: 'totalReviews', target: 200272 },
-                { id: 'aiProcessed', target: 29.4, suffix: '%' },
-                { id: 'avgConfidence', target: 83.2, suffix: '%' },
-                { id: 'platforms', target: 2 }
+                { id: 'totalReviews', target: 88868 },
+                { id: 'iosIssues', target: 56.7, suffix: '%' },
+                { id: 'topRating', target: 4.46, suffix: '★' },
+                { id: 'topThree', target: 88.7, suffix: '%' }
             ];
 
             stats.forEach(stat => {
@@ -786,13 +239,12 @@
                     if (stat.id === 'totalReviews') {
                         element.textContent = Math.floor(current).toLocaleString() + suffix;
                     } else {
-                        element.textContent = current.toFixed(1) + suffix;
+                        element.textContent = current.toFixed(stat.id === 'topRating' ? 2 : 1) + suffix;
                     }
                 }, 30);
             });
         }
 
-        // Start animation when page loads
         window.addEventListener('load', animateNumbers);
     </script>
 </body>
