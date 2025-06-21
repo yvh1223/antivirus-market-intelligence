@@ -41,13 +41,7 @@ python progress_monitor.py
 | **McAfee Security (Privacy & VPN)** | `724596345` | `com.wsandroid.suite` |
 | **Bitdefender Mobile Security** | `1255893012` | `com.bitdefender.security` |
 | **VPN & Security by Kaspersky** | `1089969624` | `com.kms.free` |
-| **AVG Mobile Security** | `1473934066` | `com.antivirus` |
-| **Avast Security & Privacy** | `1276551855` | `com.avast.android.mobilesecurity` |
-| **ESET HOME** | `1533672833` | `com.eset.ems2.gp` |
-| **Trend Micro Mobile Security** | `630442428` | `com.trendmicro.tmmms` |
-| **Malwarebytes Mobile Security** | `1327105431` | `org.malwarebytes.antimalware` |
-| **F-Secure Mobile Security** | `434893913` | `com.fsecure.ms.dc` |
-| **Sophos Intercept X for Mobile** | `1086924662` | `com.sophos.smsec` |
+
 
 ### Collection Flow
 
@@ -79,14 +73,7 @@ all_products = [
     ('Norton 360', 'NorTech (Broadcom)', '1278474169', 'com.symantec.mobilesecurity'),
     ('McAfee Total Protection', 'McAfee', '724596345', 'com.wsandroid.suite'),
     ('Bitdefender Total Security', 'Bitdefender', '1255893012', 'com.bitdefender.security'),
-    ('Kaspersky Internet Security', 'Kaspersky', '1089969624', 'com.kms.free'),
-    ('AVG AntiVirus', 'AVG (Avast)', '1473934066', 'com.antivirus'),
-    ('Avast Free Antivirus', 'Avast', '1276551855', 'com.avast.android.mobilesecurity'),
-    ('ESET Internet Security', 'ESET', '1533672833', 'com.eset.ems2.gp'),
-    ('Trend Micro Maximum Security', 'Trend Micro', '630442428', 'com.trendmicro.tmmms'),
-    ('Malwarebytes Premium', 'Malwarebytes', '1327105431', 'org.malwarebytes.antimalware'),
-    ('F-Secure SAFE', 'F-Secure', '434893913', 'com.fsecure.ms.dc'),
-    ('Sophos Intercept X', 'Sophos', '1086924662', 'com.sophos.smsec')
+    ('Kaspersky Internet Security', 'Kaspersky', '1089969624', 'com.kms.free')
 ]
 
 print('🌐 COMPLETE CROSS-PLATFORM DATA EXTRACTION')
@@ -180,41 +167,6 @@ print(f'✅ Bitdefender Total: {total:,} reviews collected')
 "
 ```
 
-### Verify Collection Results
-
-```bash
-python -c "
-from supabase import create_client
-import os
-from dotenv import load_dotenv
-
-load_dotenv()
-supabase = create_client(os.getenv('SUPABASE_URL'), os.getenv('SUPABASE_ANON_KEY'))
-
-print('📊 DATA COLLECTION VERIFICATION')
-print('=' * 50)
-
-# Get all products and their review counts
-products = supabase.table('products').select('id, name, company').execute().data
-total_reviews = 0
-
-for product in products.data:
-    count_result = supabase.table('reviews').select('id', count='exact').eq('product_id', product['id']).execute()
-    count = count_result.count
-    total_reviews += count
-    
-    if count > 0:
-        print(f'✅ {product[\"name\"]} by {product[\"company\"]}: {count:,} reviews')
-
-print(f'🎯 TOTAL REVIEWS IN DATABASE: {total_reviews:,}')
-
-# Platform breakdown
-platforms_result = supabase.table('platforms').select('id, display_name').execute()
-for platform in platforms_result.data:
-    platform_count = supabase.table('reviews').select('id', count='exact').eq('platform_id', platform['id']).execute()
-    print(f'📱 {platform[\"display_name\"]}: {platform_count.count:,} reviews')
-"
-```
 
 ---
 
@@ -232,11 +184,7 @@ python parallel_processor.py
 # 1. Norton
 # 2. Bitdefender  
 # 3. Kaspersky
-# 4. AVG
-# 5. Avast
-# 6. ESET
-# 7. Trend Micro
-# 8. Malwarebytes
+# 4. McAfee
 
 # Processing size options:
 # 1. Test run (250 reviews) - ~10 minutes
@@ -361,8 +309,6 @@ processing_version  TEXT    -- "3.0"
 
 ### Data Overview
 - **📊 200,272 reviews** collected and cleaned
-- **🤖 1,000+ reviews** processed with AI
-- **✅ 100% processing success rate**
 - **🎯 0.832 average confidence score**
 
 ### Products Covered
