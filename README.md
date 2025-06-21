@@ -230,7 +230,7 @@ for product_name, company, apple_id, google_id in quick_products:
                          product_name=product_name, company=company)
     
     total = apple_result['reviews_collected'] + google_result['reviews_collected']
-    print(f'   📱 Apple: {apple_result["reviews_collected"]:,} | 🤖 Google: {google_result["reviews_collected"]:,} | 🎯 Total: {total:,}')
+    print(f'   📱 Apple: {apple_result[\"reviews_collected\"]:,} | 🤖 Google: {google_result[\"reviews_collected\"]:,} | 🎯 Total: {total:,}')
 "
 ```
 
@@ -259,9 +259,9 @@ for product in products:
     total_reviews += count
     
     if count > 0:
-        print(f'✅ {product["name"]} by {product["company"]}: {count:,} reviews')
+        print(f'✅ {product[\"name\"]} by {product[\"company\"]}: {count:,} reviews')
     else:
-        print(f'⭕ {product["name"]} by {product["company"]}: No reviews yet')
+        print(f'⭕ {product[\"name\"]} by {product[\"company\"]}: No reviews yet')
 
 print(f'🎯 TOTAL REVIEWS IN DATABASE: {total_reviews:,}')
 
@@ -269,7 +269,7 @@ print(f'🎯 TOTAL REVIEWS IN DATABASE: {total_reviews:,}')
 platforms_result = supabase.table('platforms').select('id, display_name').execute()
 for platform in platforms_result.data:
     platform_count = supabase.table('reviews').select('id', count='exact').eq('platform_id', platform['id']).execute()
-    print(f'📱 {platform["display_name"]}: {platform_count.count:,} reviews')
+    print(f'📱 {platform[\"display_name\"]}: {platform_count.count:,} reviews')
 "
 ```
 
