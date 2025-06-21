@@ -1,58 +1,449 @@
-                        <div class="metric-item">
-                            <div class="metric-value">Ongoing</div>
-                            <div class="metric-label">Timeline</div>
-                        </div>
-                        <div class="metric-item">
-                            <div class="metric-value">$10K+</div>
-                            <div class="metric-label">Est. Cost</div>
-                        </div>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Analytics | Antivirus Market Intelligence</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-navy: #1a365d;
+            --secondary-blue: #2d5986;
+            --accent-gold: #f6ad55;
+            --success-green: #38a169;
+            --warning-orange: #ed8936;
+            --danger-red: #e53e3e;
+            --critical-red: #c53030;
+            --neutral-gray: #4a5568;
+            --light-gray: #f7fafc;
+            --border-gray: #e2e8f0;
+            --text-dark: #2d3748;
+            --text-light: #718096;
+            --info: #4299e1;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, #ffffff 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-navy) 0%, var(--secondary-blue) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(26, 54, 93, 0.15);
+        }
+
+        .header h1 {
+            font-size: 2.75rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.02em;
+        }
+
+        .nav-menu {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 1rem 0;
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1.5rem;
+            padding: 0.6rem 1.2rem;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateY(-1px);
+        }
+
+        .filters-section {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 2rem;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            padding: 2rem;
+        }
+
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .filter-group label {
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+            font-size: 0.9rem;
+        }
+
+        .filter-group select {
+            padding: 0.75rem;
+            border: 2px solid var(--border-gray);
+            border-radius: 8px;
+            font-size: 0.9rem;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus {
+            outline: none;
+            border-color: var(--primary-navy);
+        }
+
+        .charts-section {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
+
+        .chart-container {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-gray);
+            position: relative;
+        }
+
+        .chart-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .chart-large {
+            grid-column: span 2;
+            height: 450px;
+        }
+
+        .priority-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .priority-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+        }
+
+        .priority-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            border: 1px solid var(--border-gray);
+            position: relative;
+        }
+
+        .priority-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+
+        .priority-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        .priority-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-critical { background: var(--critical-red); color: white; }
+        .badge-high { background: var(--warning-orange); color: white; }
+        .badge-medium { background: var(--accent-gold); color: white; }
+
+        .priority-metrics {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+
+        .metric-item {
+            text-align: center;
+            padding: 0.75rem;
+            background: var(--light-gray);
+            border-radius: 8px;
+        }
+
+        .metric-value {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--primary-navy);
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+
+        .priority-content {
+            color: var(--text-light);
+            line-height: 1.6;
+        }
+
+        .insights-section {
+            max-width: 1200px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
+
+        .footer {
+            background: var(--primary-navy);
+            color: white;
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+        }
+
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-large { grid-column: span 1; height: 350px; }
+            .header h1 { font-size: 2rem; }
+            .filters-grid { grid-template-columns: 1fr; }
+            .priority-cards { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>Advanced Analytics</h1>
+        <p>Deep Dive Market Intelligence & Competitive Analysis</p>
+        <nav class="nav-menu">
+            <a href="index.html">📊 Dashboard</a>
+            <a href="advanced.html">🔬 Analytics</a>
+            <a href="https://github.com/yvh1223/antivirus-market-intelligence">📖 GitHub</a>
+        </nav>
+    </header>
+
+    <div class="filters-section">
+        <h2 style="color: var(--text-dark); margin-bottom: 1.5rem;">🔍 Interactive Data Filters</h2>
+        <div class="filters-grid">
+            <div class="filter-group">
+                <label for="yearFilter">Year Range</label>
+                <select id="yearFilter">
+                    <option value="all">All Years (2020-2025)</option>
+                    <option value="2025">2025 Only</option>
+                    <option value="2024">2024 Only</option>
+                    <option value="2023">2023 Only</option>
+                    <option value="2022">2022 Only</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="productFilter">Product</label>
+                <select id="productFilter">
+                    <option value="all">All Products</option>
+                    <option value="bitdefender">Bitdefender Mobile Security</option>
+                    <option value="norton">Norton 360</option>
+                    <option value="mcafee_av">McAfee AntiVirus</option>
+                    <option value="mcafee_total">McAfee Total Protection</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="platformFilter">Platform</label>
+                <select id="platformFilter">
+                    <option value="all">All Platforms</option>
+                    <option value="google">Google Play Store</option>
+                    <option value="apple">Apple App Store</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label for="ratingFilter">Rating Range</label>
+                <select id="ratingFilter">
+                    <option value="all">All Ratings</option>
+                    <option value="5">5 Stars</option>
+                    <option value="4-5">4-5 Stars</option>
+                    <option value="3-4">3-4 Stars</option>
+                    <option value="1-2">1-2 Stars</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+    <div class="charts-section">
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h2 class="chart-title">📈 Market Share Evolution</h2>
+                <canvas id="evolutionChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">🔄 AI Processing Coverage</h2>
+                <canvas id="processingChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container chart-large">
+                <h2 class="chart-title">📊 Competitive Intelligence Timeline</h2>
+                <canvas id="timelineChart" width="800" height="350"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">🎯 Platform Performance Gap</h2>
+                <canvas id="platformGapChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h2 class="chart-title">💎 Market Position Analysis</h2>
+                <canvas id="positionChart" width="400" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div class="priority-section">
+        <h2 style="color: var(--text-dark); margin-bottom: 2rem;">🚨 Strategic Action Priorities</h2>
+        <div class="priority-cards">
+            <div class="priority-card">
+                <div class="priority-header">
+                    <div class="priority-title">iOS Platform Crisis Response</div>
+                    <div class="priority-badge badge-critical">Critical</div>
+                </div>
+                <div class="priority-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">55.2%</div>
+                        <div class="metric-label">Crisis Rate</div>
                     </div>
-                    <div class="priority-content">
-                        <strong>Quality Surveillance:</strong> Market leader Bitdefender shows slight quality decline in 2025. Continuous monitoring required to detect competitive vulnerabilities and maintain market intelligence advantage.
+                    <div class="metric-item">
+                        <div class="metric-value">48hrs</div>
+                        <div class="metric-label">Response Time</div>
                     </div>
+                    <div class="metric-item">
+                        <div class="metric-value">$2B+</div>
+                        <div class="metric-label">Opportunity</div>
+                    </div>
+                </div>
+                <div class="priority-content">
+                    <strong>Immediate Action Required:</strong> iOS antivirus apps show 41-66% critical issues vs 9-42% on Android. Platform-specific optimization needed to capture $2B+ market opportunity.
+                </div>
+            </div>
+
+            <div class="priority-card">
+                <div class="priority-header">
+                    <div class="priority-title">Norton Intelligence Gap</div>
+                    <div class="priority-badge badge-high">High</div>
+                </div>
+                <div class="priority-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">30,237</div>
+                        <div class="metric-label">Unprocessed</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">2-3 weeks</div>
+                        <div class="metric-label">Timeline</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">$50K+</div>
+                        <div class="metric-label">Est. Cost</div>
+                    </div>
+                </div>
+                <div class="priority-content">
+                    <strong>Competitive Intelligence:</strong> 30,237 Norton reviews from critical period remain unprocessed. This represents major gap in market intelligence during competitor's decline phase.
+                </div>
+            </div>
+
+            <div class="priority-card">
+                <div class="priority-header">
+                    <div class="priority-title">Quality Surveillance System</div>
+                    <div class="priority-badge badge-medium">Medium</div>
+                </div>
+                <div class="priority-metrics">
+                    <div class="metric-item">
+                        <div class="metric-value">Ongoing</div>
+                        <div class="metric-label">Timeline</div>
+                    </div>
+                    <div class="metric-item">
+                        <div class="metric-value">$10K+</div>
+                        <div class="metric-label">Est. Cost</div>
+                    </div>
+                </div>
+                <div class="priority-content">
+                    <strong>Quality Surveillance:</strong> Market leader Bitdefender shows slight quality decline in 2025. Continuous monitoring required to detect competitive vulnerabilities and maintain market intelligence advantage.
                 </div>
             </div>
         </div>
+    </div>
 
-        <div class="insights-section">
-            <h2 style="color: var(--text-dark); margin-bottom: 1.5rem;">💡 Advanced Market Insights</h2>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
-                <div style="background: #f0fff4; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--success-green);">
-                    <h3 style="color: var(--success-green); margin-bottom: 0.5rem;">🚀 Market Opportunity</h3>
-                    <p style="color: var(--text-light); line-height: 1.6;">iOS platform shows 61% lower satisfaction than Android (2.60 vs 4.19 stars). This represents a massive untapped market opportunity worth $2B+ in potential revenue.</p>
-                </div>
-                
-                <div style="background: #fef5e7; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--warning-orange);">
-                    <h3 style="color: var(--warning-orange); margin-bottom: 0.5rem;">⚠️ Competitive Threat</h3>
-                    <p style="color: var(--text-light); line-height: 1.6;">Norton's 28,127 unprocessed reviews from quality decline period (2022-2023) represent critical competitive intelligence gap that competitors could exploit.</p>
-                </div>
-                
-                <div style="background: #fef2f2; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--danger-red);">
-                    <h3 style="color: var(--danger-red); margin-bottom: 0.5rem;">🎯 Acquisition Target</h3>
-                    <p style="color: var(--text-light); line-height: 1.6;">McAfee's market strength score of 185 vs market leaders' 255+ indicates vulnerable position. Recovery signals suggest potential turnaround value.</p>
-                </div>
+    <div class="insights-section">
+        <h2 style="color: var(--text-dark); margin-bottom: 1.5rem;">💡 Advanced Market Insights</h2>
+        
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1.5rem; margin-bottom: 2rem;">
+            <div style="background: #f0fff4; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--success-green);">
+                <h3 style="color: var(--success-green); margin-bottom: 0.5rem;">🚀 Market Opportunity</h3>
+                <p style="color: var(--text-light); line-height: 1.6;">iOS platform shows 61% lower satisfaction than Android (2.60 vs 4.19 stars). This represents a massive untapped market opportunity worth $2B+ in potential revenue.</p>
             </div>
+            
+            <div style="background: #fef5e7; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--warning-orange);">
+                <h3 style="color: var(--warning-orange); margin-bottom: 0.5rem;">⚠️ Competitive Threat</h3>
+                <p style="color: var(--text-light); line-height: 1.6;">Norton's 28,127 unprocessed reviews from quality decline period (2022-2023) represent critical competitive intelligence gap that competitors could exploit.</p>
+            </div>
+            
+            <div style="background: #fef2f2; padding: 1.5rem; border-radius: 10px; border-left: 4px solid var(--danger-red);">
+                <h3 style="color: var(--danger-red); margin-bottom: 0.5rem;">🎯 Acquisition Target</h3>
+                <p style="color: var(--text-light); line-height: 1.6;">McAfee's market strength score of 185 vs market leaders' 255+ indicates vulnerable position. Recovery signals suggest potential turnaround value.</p>
+            </div>
+        </div>
 
-            <div style="background: var(--light-gray); padding: 2rem; border-radius: 12px; margin-top: 2rem;">
-                <h3 style="color: var(--text-dark); margin-bottom: 1rem;">📊 Key Performance Metrics</h3>
-                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-navy);">88,868</div>
-                        <div style="font-size: 0.9rem; color: var(--text-light);">Total Reviews Analyzed</div>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-green);">57,925</div>
-                        <div style="font-size: 0.9rem; color: var(--text-light);">AI Processed Reviews</div>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-orange);">30,943</div>
-                        <div style="font-size: 0.9rem; color: var(--text-light);">Processing Backlog</div>
-                    </div>
-                    <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
-                        <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);">65.2%</div>
-                        <div style="font-size: 0.9rem; color: var(--text-light);">Processing Coverage</div>
-                    </div>
+        <div style="background: var(--light-gray); padding: 2rem; border-radius: 12px; margin-top: 2rem;">
+            <h3 style="color: var(--text-dark); margin-bottom: 1rem;">📊 Key Performance Metrics</h3>
+            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+                <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--primary-navy);">88,868</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">Total Reviews Analyzed</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--success-green);">57,925</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">AI Processed Reviews</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--warning-orange);">30,943</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">Processing Backlog</div>
+                </div>
+                <div style="text-align: center; padding: 1rem; background: white; border-radius: 8px;">
+                    <div style="font-size: 1.5rem; font-weight: 700; color: var(--info);">65.2%</div>
+                    <div style="font-size: 0.9rem; color: var(--text-light);">Processing Coverage</div>
                 </div>
             </div>
         </div>
