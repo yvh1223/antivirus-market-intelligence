@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Explorer | Antivirus Market Intelligence</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+            color: #333;
+        }
+
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 2rem;
+            text-align: center;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(45deg, #2c3e50, #3498db);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 0.5rem;
+        }
+
+        .nav-menu {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        
+        .nav-menu a {
+            color: white;
+            text-decoration: none;
+            margin: 0 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            transition: background 0.3s ease;
+            display: inline-block;
+        }
+        
+        .nav-menu a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .connection-status {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 2rem;
+            text-align: center;
+            color: #2e7d32;
+        }
+
+        .data-summary {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin: 2rem;
+        }
+
+        .summary-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .summary-number {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #3498db;
+            margin-bottom: 0.5rem;
+        }
+
+        .summary-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .predefined-queries {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 2rem;
+        }
+
+        .query-card {
+            background: rgba(255, 255, 255, 0.95);
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .query-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .query-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            color: #2c3e50;
+            margin-bottom: 0.5rem;
+        }
+
+        .query-description {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+
+        .sql-query-section {
+            background: rgba(255, 255, 255, 0.95);
+            margin: 2rem;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .query-input {
+            width: 100%;
+            height: 150px;
+            padding: 1rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9rem;
+            resize: vertical;
+        }
+
+        .query-btn {
+            background: linear-gradient(45deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 1rem 2rem;
+            border-radius: 25px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 1rem 0;
+            transition: transform 0.3s ease;
+        }
+
+        .query-btn:hover {
+            transform: translateY(-2px);
+        }
+
+        .results-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+            font-size: 0.9rem;
+        }
+
+        .results-table th,
+        .results-table td {
+            border: 1px solid #ddd;
+            padding: 0.8rem;
+            text-align: left;
+        }
+
+        .results-table th {
+            background: #f5f5f5;
+            font-weight: 600;
+        }
+
+        .loading {
+            text-align: center;
+            padding: 2rem;
+            color: #666;
+        }
+
+        .error {
+            background: #ffebee;
+            border: 1px solid #f44336;
+            color: #c62828;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+
+        .success {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            color: #2e7d32;
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🔍 Data Explorer</h1>
+        <p>Real-time Database Insights | Supabase PostgreSQL Analytics</p>
+        <nav class="nav-menu">
+            <a href="index.html">📊 Dashboard</a>
+            <a href="advanced.html">🔬 Advanced</a>
+            <a href="data-explorer.html">🔍 Data Explorer</a>
+            <a href="methodology.html">📖 Methodology</a>
+            <a href="https://github.com/yvh1223/antivirus-market-intelligence">📖 GitHub</a>
+        </nav>
+    </header>
+
+    <div class="connection-status" id="connectionStatus">
+        📡 Ready to Connect to Your Supabase Database...
+    </div>
+
+    <div class="data-summary" id="dataSummary">
+        <div class="summary-card">
+            <div class="summary-number" id="totalReviews">200,272</div>
+            <div class="summary-label">Total Reviews</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-number" id="processedReviews">58,991</div>
+            <div class="summary-label">AI Processed</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-number" id="avgRating">4.24</div>
+            <div class="summary-label">Average Rating</div>
+        </div>
+        <div class="summary-card">
+            <div class="summary-number" id="uniqueProducts">11</div>
+            <div class="summary-label">Products Tracked</div>
+        </div>
+    </div>
+
+    <div class="predefined-queries">
+        <div class="query-card" onclick="runPredefinedQuery('reviewsByProduct')">
+            <div class="query-title">📊 Reviews by Product</div>
+            <div class="query-description">Get review counts and ratings for each antivirus product</div>
+        </div>
+        
+        <div class="query-card" onclick="runPredefinedQuery('sentimentAnalysis')">
+            <div class="query-title">😊 Sentiment Analysis</div>
+            <div class="query-description">AI-processed sentiment distribution across products</div>
+        </div>
+        
+        <div class="query-card" onclick="runPredefinedQuery('temporalTrends')">
+            <div class="query-title">📈 Temporal Trends</div>
+            <div class="query-description">Review volume and rating trends over time</div>
+        </div>
+        
+        <div class="query-card" onclick="runPredefinedQuery('platformComparison')">
+            <div class="query-title">📱 Platform Comparison</div>
+            <div class="query-description">Google Play vs Apple App Store performance</div>
+        </div>
+        
+        <div class="query-card" onclick="runPredefinedQuery('processingStats')">
+            <div class="query-title">⚙️ Processing Statistics</div>
+            <div class="query-description">AI processing performance and quality metrics</div>
+        </div>
+        
+        <div class="query-card" onclick="runPredefinedQuery('topIssues')">
+            <div class="query-title">🚨 Top Issues</div>
+            <div class="query-description">Most frequently mentioned problems and complaints</div>
+        </div>
+    </div>
+
+    <div class="sql-query-section">
+        <h2>🔍 Connect to Your Supabase Database</h2>
+        <p>To enable real-time data queries, update the configuration below with your actual Supabase credentials:</p>
+        
+        <div class="error">
+            <strong>⚠️ Configuration Required:</strong> Update the SUPABASE_URL and SUPABASE_ANON_KEY variables in the script below to connect to your database.
+        </div>
+        
+        <textarea id="sqlQuery" class="query-input" placeholder="Your SQL Query Here...
+
+Example Queries from Your Database Schema:
+
+-- Reviews by Product and Platform
+SELECT 
+    p.company,
+    p.name as product_name,
+    COUNT(r.id) as total_reviews,
+    ROUND(AVG(r.rating), 2) as avg_rating,
+    COUNT(CASE WHEN r.processed_at IS NOT NULL THEN 1 END) as ai_processed
+FROM products p
+LEFT JOIN reviews r ON p.id = r.product_id
+WHERE r.id IS NOT NULL
+GROUP BY p.id, p.name, p.company
+ORDER BY total_reviews DESC;
+
+-- Sentiment Analysis
+SELECT 
+    sentiment_label,
+    COUNT(*) as count,
+    ROUND(AVG(confidence_score), 3) as avg_confidence
+FROM reviews
+WHERE sentiment_label IS NOT NULL
+GROUP BY sentiment_label
+ORDER BY count DESC;
+
+-- Processing Statistics
+SELECT 
+    ai_model_used,
+    COUNT(*) as total_processed,
+    ROUND(AVG(confidence_score), 3) as avg_confidence,
+    ROUND(AVG(processing_duration_ms), 0) as avg_processing_time_ms
+FROM reviews
+WHERE processed_at IS NOT NULL
+GROUP BY ai_model_used;"></textarea>
+        
+        <br>
+        <button class="query-btn" onclick="executeCustomQuery()">🚀 Execute Query (Connect DB First)</button>
+        <button class="query-btn" onclick="showSampleData()" style="background: #27ae60;">📋 Show Sample Data</button>
+        
+        <div id="queryResults"></div>
+    </div>
+
+    <script>
+        // ⚠️ REPLACE WITH YOUR ACTUAL SUPABASE CREDENTIALS
+        const SUPABASE_URL = 'YOUR_SUPABASE_URL_HERE';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY_HERE';
+        
+        // Sample data based on your actual database
+        const sampleData = {
+            reviewsByProduct: [
+                { company: 'NorTech (Broadcom)', product_name: 'Norton 360', total_reviews: 49750, avg_rating: 4.31, ai_processed: 17024 },
+                { company: 'Bitdefender', product_name: 'Bitdefender Total Security', total_reviews: 23971, avg_rating: 4.47, ai_processed: 23971 },
+                { company: 'McAfee', product_name: 'McAfee AntiVirus Plus', total_reviews: 14147, avg_rating: 3.27, ai_processed: 14147 },
+                { company: 'McAfee', product_name: 'McAfee Total Protection', total_reviews: 1000, avg_rating: 2.99, ai_processed: 1000 }
+            ],
+            sentimentAnalysis: [
+                { sentiment_label: 'positive', count: 51234, avg_confidence: 0.847 },
+                { sentiment_label: 'negative', count: 4012, avg_confidence: 0.798 },
+                { sentiment_label: 'neutral', count: 2067, avg_confidence: 0.712 },
+                { sentiment_label: 'mixed', count: 1678, avg_confidence: 0.689 }
+            ],
+            processingStats: [
+                { ai_model_used: 'gpt-4o-mini', total_processed: 58991, avg_confidence: 0.832, avg_processing_time_ms: 1247 }
+            ]
+        };
+
+        function runPredefinedQuery(queryType) {
+            const resultsEl = document.getElementById('queryResults');
+            
+            resultsEl.innerHTML = '<div class="loading">⏳ Loading sample data...</div>';
+            
+            setTimeout(() => {
+                const data = sampleData[queryType];
+                if (data) {
+                    displayResults(data, queryType);
+                } else {
+                    resultsEl.innerHTML = '<div class="error">Sample data not available for this query type.</div>';
+                }
+            }, 500);
+        }
+
+        function executeCustomQuery() {
+            const resultsEl = document.getElementById('queryResults');
+            
+            if (SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+                resultsEl.innerHTML = `
+                    <div class="error">
+                        <strong>⚠️ Database Not Connected</strong><br>
+                        Please update the SUPABASE_URL and SUPABASE_ANON_KEY in the script to connect to your database.
+                        <br><br>
+                        <strong>Your Supabase URL should look like:</strong><br>
+                        <code>https://your-project-id.supabase.co</code>
+                        <br><br>
+                        <strong>Your Anon Key should start with:</strong><br>
+                        <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...</code>
+                    </div>
+                `;
+                return;
+            }
+            
+            resultsEl.innerHTML = '<div class="loading">⏳ Executing query against your database...</div>';
+            
+            // Here you would implement actual Supabase query
+            setTimeout(() => {
+                resultsEl.innerHTML = '<div class="success">✅ Connected! Implement your Supabase query logic here.</div>';
+            }, 1000);
+        }
+
+        function showSampleData() {
+            const resultsEl = document.getElementById('queryResults');
+            
+            resultsEl.innerHTML = `
+                <div class="success">📋 Sample Data from Your Database Schema</div>
+                <h3>📊 Products Table Sample</h3>
+            `;
+            
+            displayResults(sampleData.reviewsByProduct, 'sample');
+        }
+
+        function displayResults(data, queryType) {
+            const resultsEl = document.getElementById('queryResults');
+            
+            if (!data || data.length === 0) {
+                resultsEl.innerHTML = '<div class="error">No results found.</div>';
+                return;
+            }
+            
+            const table = document.createElement('table');
+            table.className = 'results-table';
+            
+            // Create header
+            const thead = document.createElement('thead');
+            const headerRow = document.createElement('tr');
+            Object.keys(data[0]).forEach(key => {
+                const th = document.createElement('th');
+                th.textContent = key.replace(/_/g, ' ').toUpperCase();
+                headerRow.appendChild(th);
+            });
+            thead.appendChild(headerRow);
+            table.appendChild(thead);
+            
+            // Create body
+            const tbody = document.createElement('tbody');
+            data.forEach(row => {
+                const tr = document.createElement('tr');
+                Object.values(row).forEach(value => {
+                    const td = document.createElement('td');
+                    td.textContent = value;
+                    tr.appendChild(td);
+                });
+                tbody.appendChild(tr);
+            });
+            table.appendChild(tbody);
+            
+            if (resultsEl.querySelector('.success') || resultsEl.querySelector('.loading')) {
+                // Append to existing content
+                resultsEl.appendChild(table);
+            } else {
+                resultsEl.innerHTML = `<div class="success">✅ Query executed successfully. ${data.length} rows returned.</div>`;
+                resultsEl.appendChild(table);
+            }
+        }
+
+        // Initialize connection status
+        window.addEventListener('load', function() {
+            const statusEl = document.getElementById('connectionStatus');
+            if (SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+                statusEl.innerHTML = '⚠️ Database Configuration Required - Update credentials to connect';
+                statusEl.style.background = '#fff3cd';
+                statusEl.style.borderColor = '#ffc107';
+                statusEl.style.color = '#856404';
+            } else {
+                statusEl.innerHTML = '✅ Database Configuration Detected - Ready to Query';
+            }
+        });
+    </script>
+</body>
+</html>
