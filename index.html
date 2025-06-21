@@ -1,4 +1,172 @@
-5
+ needed</li>
+            </ul>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 Antivirus Market Intelligence | AI-Powered Executive Analytics</p>
+        <p>Live Data: 88,868 Reviews | AI Processing: 57,925 Completed | Last Updated: June 21, 2025</p>
+    </footer>
+
+    <script>
+        const corporateColors = {
+            primary: '#1a365d',
+            secondary: '#2d5986', 
+            success: '#38a169',
+            warning: '#ed8936',
+            danger: '#e53e3e',
+            critical: '#c53030',
+            info: '#4299e1',
+            neutral: '#718096',
+            bitdefender: '#38a169',
+            norton: '#1a365d', 
+            mcafee: '#ed8936'
+        };
+
+        // Market Share Chart
+        const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
+        new Chart(marketShareCtx, {
+            type: 'doughnut',
+            data: {
+                labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus', 'McAfee Total Protection'],
+                datasets: [{
+                    data: [49750, 23971, 14147, 1000],
+                    backgroundColor: [
+                        corporateColors.norton,
+                        corporateColors.bitdefender,
+                        corporateColors.warning,
+                        corporateColors.danger
+                    ],
+                    borderWidth: 2,
+                    borderColor: '#fff',
+                    cutout: '60%'
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                        labels: {
+                            padding: 15,
+                            font: { size: 11, family: 'Inter' },
+                            usePointStyle: true
+                        }
+                    }
+                }
+            }
+        });
+
+        // Platform Performance Crisis Chart
+        const platformCtx = document.getElementById('platformChart').getContext('2d');
+        new Chart(platformCtx, {
+            type: 'bar',
+            data: {
+                labels: ['Google Play Store', 'Apple App Store'],
+                datasets: [
+                    {
+                        label: 'Average Rating',
+                        data: [4.19, 2.60],
+                        backgroundColor: [corporateColors.success, corporateColors.danger],
+                        borderRadius: 6
+                    },
+                    {
+                        label: 'Critical Issues (%)',
+                        data: [16.4, 56.7],
+                        backgroundColor: [corporateColors.warning + '80', corporateColors.critical],
+                        borderRadius: 6
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: true,
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // AI Processing Status Chart
+        const processingCtx = document.getElementById('processingChart').getContext('2d');
+        new Chart(processingCtx, {
+            type: 'bar',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'Bitdefender - AI Processed',
+                        data: [58, 80, 6031, 6672, 7167, 3074],
+                        backgroundColor: corporateColors.bitdefender,
+                        stack: 'bitdefender'
+                    },
+                    {
+                        label: 'Bitdefender - Unprocessed', 
+                        data: [0, 0, 889, 0, 0, 0],
+                        backgroundColor: corporateColors.bitdefender + '40',
+                        stack: 'bitdefender'
+                    },
+                    {
+                        label: 'Norton - AI Processed',
+                        data: [0, 0, 1, 1, 12627, 6694],
+                        backgroundColor: corporateColors.norton,
+                        stack: 'norton'
+                    },
+                    {
+                        label: 'Norton - Unprocessed',
+                        data: [0, 0, 14303, 13795, 2329, 0],
+                        backgroundColor: corporateColors.norton + '40',
+                        stack: 'norton'
+                    },
+                    {
+                        label: 'McAfee - All Processed',
+                        data: [0, 0, 6856, 3687, 3179, 1425],
+                        backgroundColor: corporateColors.warning,
+                        stack: 'mcafee'
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                scales: {
+                    x: { stacked: true },
+                    y: { 
+                        stacked: true,
+                        title: { display: true, text: 'Review Volume' }
+                    }
+                },
+                plugins: {
+                    legend: { position: 'top' }
+                }
+            }
+        });
+
+        // Competitive Rating Analysis
+        const ratingsCtx = document.getElementById('ratingsChart').getContext('2d');
+        new Chart(ratingsCtx, {
+            type: 'line',
+            data: {
+                labels: ['2020', '2021', '2022', '2023', '2024', '2025'],
+                datasets: [
+                    {
+                        label: 'Bitdefender Total Security',
+                        data: [1.79, 3.05, 4.48, 4.48, 4.47, 4.45],
+                        borderColor: corporateColors.bitdefender,
+                        backgroundColor: corporateColors.bitdefender + '20',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
+                    },
+                    {
+                        label: 'Norton 360', 
+                        data: [null, null, 4.39, 4.34, 4.33, 4.17],
+                        borderColor: corporateColors.norton,
+                        backgroundColor: corporateColors.norton + '20',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 5
                     },
                     {
                         label: 'McAfee AntiVirus Plus',
@@ -27,7 +195,7 @@
             }
         });
 
-        // Market Position Matrix (Satisfaction vs Market Share)
+        // Market Position Matrix
         const matrixCtx = document.getElementById('matrixChart').getContext('2d');
         new Chart(matrixCtx, {
             type: 'scatter',
