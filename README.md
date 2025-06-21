@@ -147,8 +147,8 @@ graph TD
     B --> C[Send to OpenAI GPT-4o-mini]
     
     C --> D[AI Analysis]
-    D --> E[Sentiment Score (-1.0 to 1.0)]
-    D --> F[Sentiment Label (positive/negative/neutral)]
+    D --> E[Sentiment Score]
+    D --> F[Sentiment Label]
     D --> G[Key Topics Extraction]
     D --> H[Issues Identification]
     D --> I[Priority Level Assessment]
@@ -229,6 +229,14 @@ Each review gets analyzed and enriched with:
   "processing_version": "3.0"
 }
 ```
+
+**AI Analysis Details:**
+- **Sentiment Score**: -1.0 (very negative) to 1.0 (very positive)
+- **Sentiment Label**: positive, negative, neutral classification
+- **Confidence Score**: 0.0 to 1.0 AI confidence rating
+- **Key Topics**: ["performance", "ui", "support", "pricing"]
+- **Issues Mentioned**: ["slow_scanning", "false_positives", "bugs"]
+- **Priority Level**: low, medium, high business impact
 
 ---
 
