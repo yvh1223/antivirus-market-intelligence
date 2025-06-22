@@ -401,7 +401,7 @@
                     <input type="range" id="yearSlider" min="2022" max="2025" value="2025" class="year-slider">
                     <div class="year-display">
                         <span class="year-value" id="yearValue">2025</span>
-                        <small class="year-subtitle">Static data - no API calls</small>
+                        <small class="year-subtitle">Interactive year analysis</small>
                     </div>
                 </div>
             </div>
@@ -539,8 +539,36 @@
                                     }
                                 }
                             }
+                        },
+                        layout: {
+                            padding: { top: 30 }
                         }
-                    }
+                    },
+                    plugins: [{
+                        afterDatasetsDraw: function(chart) {
+                            var ctx = chart.ctx;
+                            ctx.save();
+                            ctx.font = 'bold 12px Inter';
+                            ctx.fillStyle = '#2d3748';
+                            ctx.textAlign = 'center';
+                            
+                            var total = chart.data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
+                            
+                            chart.data.datasets[0].data.forEach(function(datapoint, index) {
+                                var meta = chart.getDatasetMeta(0);
+                                var arc = meta.data[index];
+                                var percentage = ((datapoint / total) * 100).toFixed(1);
+                                
+                                var midAngle = arc.startAngle + (arc.endAngle - arc.startAngle) / 2;
+                                var x = arc.x + Math.cos(midAngle) * (arc.outerRadius * 0.7);
+                                var y = arc.y + Math.sin(midAngle) * (arc.outerRadius * 0.7);
+                                
+                                ctx.fillText(percentage + '%', x, y - 5);
+                                ctx.fillText(datapoint.toLocaleString(), x, y + 8);
+                            });
+                            ctx.restore();
+                        }
+                    }]
                 });
             }
 
@@ -571,8 +599,28 @@
                                     }
                                 }
                             }
+                        },
+                        layout: {
+                            padding: { top: 30 }
                         }
-                    }
+                    },
+                    plugins: [{
+                        afterDatasetsDraw: function(chart) {
+                            var ctx = chart.ctx;
+                            ctx.save();
+                            ctx.font = 'bold 14px Inter';
+                            ctx.fillStyle = '#2d3748';
+                            ctx.textAlign = 'center';
+                            
+                            chart.data.datasets[0].data.forEach(function(datapoint, index) {
+                                var meta = chart.getDatasetMeta(0);
+                                var x = meta.data[index].x;
+                                var y = meta.data[index].y;
+                                ctx.fillText(datapoint + '★', x, y - 10);
+                            });
+                            ctx.restore();
+                        }
+                    }]
                 });
             }
 
@@ -692,9 +740,43 @@
                         responsive: true,
                         maintainAspectRatio: false,
                         scales: {
-                            y: { beginAtZero: true, max: 5 }
+                            y: { 
+                                beginAtZero: true, 
+                                max: 5,
+                                ticks: {
+                                    padding: 5
+                                }
+                            },
+                            x: {
+                                ticks: {
+                                    maxRotation: 45,
+                                    minRotation: 45
+                                }
+                            }
                         },
-                        plugins: { legend: { position: 'top' } }
+                        plugins: { 
+                            legend: { 
+                                position: 'top',
+                                labels: {
+                                    padding: 20,
+                                    usePointStyle: true
+                                }
+                            }
+                        },
+                        elements: {
+                            point: {
+                                radius: 4,
+                                hoverRadius: 6
+                            }
+                        },
+                        layout: {
+                            padding: {
+                                left: 10,
+                                right: 10,
+                                top: 10,
+                                bottom: 10
+                            }
+                        }
                     }
                 });
             }
@@ -803,7 +885,4 @@
         });
     </script>
 </body>
-</html>data.datasets[0].data = [dist.norton[4], dist.bitdefender[4], dist.mcafee[4]];
-                issuesChart.data.datasets[1].data = [dist.norton[3], dist.bitdefender[3], dist.mcafee[3]];
-                issuesChart.data.datasets[2].data = [dist.norton[2], dist.bitdefender[2], dist.mcafee[2]];
-                issuesChart.
+</html>
