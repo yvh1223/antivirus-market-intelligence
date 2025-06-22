@@ -188,6 +188,75 @@
             text-align: center;
         }
 
+        .year-filter-container {
+            background: white;
+            margin: 0 auto 3rem auto;
+            max-width: 600px;
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+            border: 1px solid var(--border-gray);
+        }
+
+        .year-filter {
+            text-align: center;
+        }
+
+        .filter-label {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            display: block;
+            margin-bottom: 1rem;
+        }
+
+        .slider-container {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            justify-content: center;
+        }
+
+        .year-slider {
+            flex: 1;
+            max-width: 300px;
+            height: 8px;
+            background: linear-gradient(to right, var(--border-gray) 0%, var(--primary-navy) 100%);
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+        }
+
+        .year-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: var(--primary-navy);
+            cursor: pointer;
+            border: 3px solid white;
+            box-shadow: 0 2px 8px rgba(26, 54, 93, 0.3);
+        }
+
+        .year-display {
+            text-align: center;
+            min-width: 80px;
+        }
+
+        .year-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--primary-navy);
+            display: block;
+        }
+
+        .year-subtitle {
+            font-size: 0.8rem;
+            color: var(--text-light);
+            margin-top: 0.2rem;
+        }
+
         .charts-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(450px, 1fr));
@@ -271,7 +340,7 @@
             🤖 100% AI-Processed • 87,368 Reviews Analyzed
         </div>
         <div class="data-source">
-            <strong>Latest Data:</strong> Google Play Store Only • <strong>Coverage:</strong> Norton 360, Bitdefender Total Security, McAfee Portfolio • <strong>Updated:</strong> June 21, 2025
+            <strong>Data Timeframe:</strong> 2023-2025 (Complete Dataset) • <strong>Platform:</strong> Google Play Store Only • <strong>Coverage:</strong> Norton 360, Bitdefender Total Security, McAfee AntiVirus Plus • <strong>Updated:</strong> June 22, 2025
         </div>
         <nav class="nav-menu">
             <a href="#dashboard">📊 Executive Dashboard</a>
@@ -316,8 +385,8 @@
                     <div class="card-title">Vulnerable Player</div>
                     <div class="card-icon icon-vulnerable">⚠️</div>
                 </div>
-                <div class="card-value" id="vulnerablePlayer">3.16★</div>
-                <div class="card-change change-warning">▼ McAfee AntiVirus Plus</div>
+                <div class="card-value" id="vulnerablePlayer">41.6%</div>
+                <div class="card-change change-warning">▼ McAfee AntiVirus Plus (Critical Issues)</div>
             </div>
         </div>
     </div>
@@ -325,19 +394,32 @@
     <div class="analytics-section" id="analytics">
         <h2 class="section-title">Market Performance Analytics</h2>
         
+        <div class="year-filter-container">
+            <div class="year-filter">
+                <label for="yearSlider" class="filter-label">📅 Select Year for Analysis:</label>
+                <div class="slider-container">
+                    <input type="range" id="yearSlider" min="2022" max="2025" value="2025" class="year-slider">
+                    <div class="year-display">
+                        <span class="year-value" id="yearValue">2025</span>
+                        <small class="year-subtitle">Static data - no API calls</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
         <div class="charts-grid">
             <div class="chart-container">
-                <h3 class="chart-title">📊 Market Share by Review Volume</h3>
+                <h3 class="chart-title">📊 Market Share Distribution (Based on Review Volume)</h3>
                 <canvas id="marketShareChart" width="400" height="300"></canvas>
             </div>
 
             <div class="chart-container">
-                <h3 class="chart-title">⭐ Rating Performance Comparison</h3>
+                <h3 class="chart-title">⭐ Average Rating Performance Comparison</h3>
                 <canvas id="ratingChart" width="400" height="300"></canvas>
             </div>
 
             <div class="chart-container">
-                <h3 class="chart-title">🚨 Critical Issues Analysis</h3>
+                <h3 class="chart-title">⭐ Rating Distribution Analysis (Google Play Store Reviews)</h3>
                 <canvas id="issuesChart" width="400" height="300"></canvas>
             </div>
 
@@ -345,39 +427,27 @@
                 <h3 class="chart-title">📈 Monthly Performance Trends (2023-2025)</h3>
                 <canvas id="trendsChart" width="800" height="350"></canvas>
             </div>
-
-            <div class="chart-container">
-                <h3 class="chart-title">🎯 Priority Level Distribution</h3>
-                <canvas id="priorityChart" width="400" height="300"></canvas>
-            </div>
         </div>
 
         <div class="insights-grid">
             <div class="insight-card success">
                 <div class="insight-title">🏆 Market Leadership Analysis</div>
                 <div class="insight-content">
-                    <strong>Bitdefender</strong> maintains quality leadership with 4.49★ average rating. Despite 23,471 reviews (26.9% market share), consistently delivers superior user experience with only 8.9% critical issues rate.
+                    <strong>Bitdefender</strong> maintains quality leadership with consistent 4.49★ average rating. Despite 23,471 reviews (27.0% market share), consistently delivers superior user experience with only 8.9% critical issues rate - best in class performance.
                 </div>
             </div>
 
             <div class="insight-card warning">
                 <div class="insight-title">📊 Volume vs Quality Gap</div>
                 <div class="insight-content">
-                    <strong>Norton 360</strong> leads in volume (49,250 reviews, 56.4% share) but shows quality concerns with 4.35★ rating and 12.7% critical issues. Processing completion reveals performance gaps.
+                    <strong>Norton 360</strong> leads in volume (49,250 reviews, 56.4% share) but shows quality concerns with declining ratings from 4.37★ (Jan 2023) to 3.99★ (Jun 2025). Critical issues rate at 12.7% indicates performance gaps.
                 </div>
             </div>
 
             <div class="insight-card danger">
-                <div class="insight-title">⚠️ Acquisition Opportunity</div>
+                <div class="insight-title">⚠️ Rating Distribution Insights</div>
                 <div class="insight-content">
-                    <strong>McAfee AntiVirus Plus</strong> shows vulnerable position (3.16★, 41.6% critical issues) but <strong>McAfee Total Protection</strong> signals recovery (3.91★). Portfolio optimization opportunity.
-                </div>
-            </div>
-
-            <div class="insight-card">
-                <div class="insight-title">🤖 AI Processing Complete</div>
-                <div class="insight-content">
-                    All 87,368 reviews now 100% AI processed including 22,463 Norton reviews previously unprocessed. Complete competitive intelligence enables real-time market monitoring.
+                    <strong>2025 Analysis:</strong> Bitdefender shows 77.3% excellent ratings (5★) with only 9.5% poor ratings (1-2★). McAfee shows 49.4% excellent vs 35.7% poor ratings. Total market: 10,205 reviews analyzed.
                 </div>
             </div>
         </div>
@@ -387,12 +457,12 @@
         <h3>Google Play Store Antivirus Intelligence Platform</h3>
         <p>Powered by AI Analysis of 87,368 Reviews | 100% Processing Complete | Real-Time Market Insights</p>
         <p style="margin-top: 1rem; opacity: 0.8;">
-            Norton 360: 49,250 reviews • Bitdefender: 23,471 reviews • McAfee Portfolio: 14,647 reviews
+            Norton 360: 49,250 reviews • Bitdefender: 23,471 reviews • McAfee AntiVirus Plus: 14,147 reviews
         </p>
     </footer>
 
     <script>
-        const colors = {
+        var colors = {
             norton: '#1a365d',
             bitdefender: '#38a169', 
             mcafee: '#ed8936',
@@ -401,179 +471,298 @@
             danger: '#e53e3e'
         };
 
-        // Market Share Chart
-        const marketShareCtx = document.getElementById('marketShareChart').getContext('2d');
-        new Chart(marketShareCtx, {
-            type: 'doughnut',
-            data: {
-                labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee Portfolio'],
-                datasets: [{
-                    data: [49250, 23471, 14647],
-                    backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
-                    borderWidth: 3,
-                    borderColor: '#fff'
-                }]
+        var marketShareChart, ratingChart, issuesChart, trendsChart;
+
+        var yearData = {
+            2022: {
+                marketShare: [14304, 6809, 6856],
+                ratings: [4.39, 4.50, 3.22],
+                ratingDistribution: {
+                    norton: [1357, 336, 452, 1373, 10786],
+                    bitdefender: [424, 146, 221, 827, 5191],
+                    mcafee: [2056, 676, 619, 707, 2798]
+                }
             },
-            options: {
-                responsive: true,
-                plugins: {
-                    legend: { position: 'bottom' },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                const total = context.dataset.data.reduce((a, b) => a + b, 0);
-                                const percentage = ((context.parsed * 100) / total).toFixed(1);
-                                return `${context.label}: ${context.parsed.toLocaleString()} reviews (${percentage}%)`;
+            2023: {
+                marketShare: [13796, 6578, 3537],
+                ratings: [4.34, 4.50, 2.88],
+                ratingDistribution: {
+                    norton: [1469, 310, 454, 1394, 10169],
+                    bitdefender: [433, 152, 232, 654, 5107],
+                    mcafee: [1360, 364, 340, 299, 1174]
+                }
+            },
+            2024: {
+                marketShare: [14778, 7061, 2944],
+                ratings: [4.35, 4.49, 3.28],
+                ratingDistribution: {
+                    norton: [1498, 324, 534, 1624, 10798],
+                    bitdefender: [496, 159, 244, 653, 5509],
+                    mcafee: [889, 258, 219, 283, 1295]
+                }
+            },
+            2025: {
+                marketShare: [6372, 3023, 810],
+                ratings: [4.26, 4.47, 3.43],
+                ratingDistribution: {
+                    norton: [788, 169, 207, 665, 4543],
+                    bitdefender: [225, 63, 111, 287, 2337],
+                    mcafee: [223, 66, 57, 64, 400]
+                }
+            }
+        };
+
+        function initializeCharts() {
+            var marketShareCtx = document.getElementById('marketShareChart');
+            if (marketShareCtx) {
+                marketShareChart = new Chart(marketShareCtx.getContext('2d'), {
+                    type: 'doughnut',
+                    data: {
+                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus'],
+                        datasets: [{
+                            data: [6372, 3023, 810],
+                            backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
+                            borderWidth: 3,
+                            borderColor: '#fff'
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: { position: 'bottom' },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        var total = context.dataset.data.reduce(function(a, b) { return a + b; }, 0);
+                                        var percentage = ((context.parsed * 100) / total).toFixed(1);
+                                        return context.label + ': ' + context.parsed.toLocaleString() + ' reviews (' + percentage + '%)';
+                                    }
+                                }
                             }
                         }
                     }
-                }
+                });
             }
-        });
 
-        // Rating Performance Chart
-        const ratingCtx = document.getElementById('ratingChart').getContext('2d');
-        new Chart(ratingCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus'],
-                datasets: [{
-                    label: 'Average Rating',
-                    data: [4.35, 4.49, 3.16],
-                    backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    y: { beginAtZero: true, max: 5 }
-                },
-                plugins: { legend: { display: false } }
-            }
-        });
-
-        // Monthly Trends Chart (Extended 2023-2025)
-        const trendsCtx = document.getElementById('trendsChart').getContext('2d');
-        new Chart(trendsCtx, {
-            type: 'line',
-            data: {
-                labels: ['Jan 23', 'Feb 23', 'Mar 23', 'Apr 23', 'May 23', 'Jun 23', 
-                        'Jul 23', 'Aug 23', 'Sep 23', 'Oct 23', 'Nov 23', 'Dec 23',
-                        'Jan 24', 'Feb 24', 'Mar 24', 'Apr 24', 'May 24', 'Jun 24', 
-                        'Jul 24', 'Aug 24', 'Sep 24', 'Oct 24', 'Nov 24', 'Dec 24',
-                        'Jan 25', 'Feb 25', 'Mar 25', 'Apr 25', 'May 25', 'Jun 25'],
-                datasets: [
-                    {
-                        label: 'Bitdefender Rating',
-                        data: [4.51, 4.49, 4.52, 4.48, 4.50, 4.49, 4.47, 4.51, 4.48, 4.46, 4.50, 4.48,
-                               4.53, 4.47, 4.53, 4.35, 4.38, 4.53, 4.61, 4.60, 4.52, 4.47, 4.47, 4.33,
-                               4.43, 4.55, 4.46, 4.48, 4.43, 4.52],
-                        borderColor: colors.bitdefender,
-                        backgroundColor: colors.bitdefender + '20',
-                        tension: 0.4,
-                        borderWidth: 3
+            var ratingCtx = document.getElementById('ratingChart');
+            if (ratingCtx) {
+                ratingChart = new Chart(ratingCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus'],
+                        datasets: [{
+                            label: 'Average Rating',
+                            data: [4.26, 4.47, 3.43],
+                            backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
+                            borderRadius: 8
+                        }]
                     },
-                    {
-                        label: 'Norton Rating',
-                        data: [4.38, 4.36, 4.39, 4.35, 4.37, 4.34, 4.32, 4.30, 4.33, 4.31, 4.35, 4.33,
-                               4.46, 4.37, 4.36, 4.38, 4.37, 4.32, 4.29, 4.27, 4.36, 4.26, 4.38, 4.34,
-                               4.23, 4.33, 4.31, 4.26, 4.22, 4.07],
-                        borderColor: colors.norton,
-                        backgroundColor: colors.norton + '20',
-                        tension: 0.4,
-                        borderWidth: 3
-                    },
-                    {
-                        label: 'McAfee Rating',
-                        data: [2.95, 2.88, 2.92, 2.87, 2.91, 2.94, 2.89, 2.86, 2.90, 2.85, 2.92, 2.88,
-                               3.14, 3.48, 3.03, 3.14, 3.29, 3.51, 3.26, 3.35, 3.24, 3.38, 3.30, 3.30,
-                               3.47, 3.42, 3.25, 3.55, 3.90, 3.94],
-                        borderColor: colors.mcafee,
-                        backgroundColor: colors.mcafee + '20',
-                        tension: 0.4,
-                        borderWidth: 3
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { beginAtZero: true, max: 5 }
+                        },
+                        plugins: { 
+                            legend: { display: false },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        return context.label + ': ' + context.parsed.y + '★ average rating';
+                                    }
+                                }
+                            }
+                        }
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    y: { beginAtZero: true, max: 5 }
-                },
-                plugins: { legend: { position: 'top' } }
+                });
             }
-        });
 
-        // Critical Issues Chart
-        const issuesCtx = document.getElementById('issuesChart').getContext('2d');
-        new Chart(issuesCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Norton 360', 'Bitdefender', 'McAfee AntiVirus'],
-                datasets: [{
-                    label: 'Critical Issues Count',
-                    data: [6251, 2098, 5892],
-                    backgroundColor: [colors.warning, colors.success, colors.danger],
-                    borderRadius: 8
-                }]
-            },
-            options: {
-                responsive: true,
-                plugins: { legend: { display: false } }
-            }
-        });
-
-        // Priority Level Distribution Chart
-        const priorityCtx = document.getElementById('priorityChart').getContext('2d');
-        new Chart(priorityCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Bitdefender', 'Norton', 'McAfee'],
-                datasets: [
-                    {
-                        label: 'High Priority',
-                        data: [5043, 6022, 6708],
-                        backgroundColor: colors.danger
+            var issuesCtx = document.getElementById('issuesChart');
+            if (issuesCtx) {
+                issuesChart = new Chart(issuesCtx.getContext('2d'), {
+                    type: 'bar',
+                    data: {
+                        labels: ['Norton 360\n(6,372 reviews)', 'Bitdefender Total Security\n(3,023 reviews)', 'McAfee AntiVirus Plus\n(810 reviews)'],
+                        datasets: [
+                            {
+                                label: '5★ Excellent',
+                                data: [4543, 2337, 400],
+                                backgroundColor: '#38a169'
+                            },
+                            {
+                                label: '4★ Good',
+                                data: [665, 287, 64],
+                                backgroundColor: '#68d391'
+                            },
+                            {
+                                label: '3★ Average',
+                                data: [207, 111, 57],
+                                backgroundColor: '#fbb747'
+                            },
+                            {
+                                label: '2★ Poor',
+                                data: [169, 63, 66],
+                                backgroundColor: '#f687b3'
+                            },
+                            {
+                                label: '1★ Very Poor',
+                                data: [788, 225, 223],
+                                backgroundColor: '#e53e3e'
+                            }
+                        ]
                     },
-                    {
-                        label: 'Medium Priority', 
-                        data: [5012, 5896, 3352],
-                        backgroundColor: colors.warning
-                    },
-                    {
-                        label: 'Low Priority',
-                        data: [13416, 14869, 4587],
-                        backgroundColor: colors.success
+                    options: {
+                        responsive: true,
+                        scales: {
+                            x: { stacked: true },
+                            y: { 
+                                stacked: true,
+                                beginAtZero: true,
+                                ticks: {
+                                    callback: function(value) {
+                                        return value.toLocaleString();
+                                    }
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: { 
+                                position: 'bottom',
+                                labels: {
+                                    usePointStyle: true,
+                                    padding: 15
+                                }
+                            },
+                            tooltip: {
+                                callbacks: {
+                                    label: function(context) {
+                                        var productIndex = context.dataIndex;
+                                        var total = productIndex === 0 ? 6372 : productIndex === 1 ? 3023 : 810;
+                                        var percentage = ((context.parsed.y / total) * 100).toFixed(1);
+                                        return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' reviews (' + percentage + '%)';
+                                    }
+                                }
+                            }
+                        }
                     }
-                ]
-            },
-            options: {
-                responsive: true,
-                scales: {
-                    x: { stacked: true },
-                    y: { stacked: true }
-                }
+                });
             }
-        });
 
-        // Animate numbers
+            var trendsCtx = document.getElementById('trendsChart');
+            if (trendsCtx) {
+                trendsChart = new Chart(trendsCtx.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: ['Jan 23', 'Feb 23', 'Mar 23', 'Apr 23', 'May 23', 'Jun 23', 'Jul 23', 'Aug 23', 'Sep 23', 'Oct 23', 'Nov 23', 'Dec 23',
+                                'Jan 24', 'Feb 24', 'Mar 24', 'Apr 24', 'May 24', 'Jun 24', 'Jul 24', 'Aug 24', 'Sep 24', 'Oct 24', 'Nov 24', 'Dec 24',
+                                'Jan 25', 'Feb 25', 'Mar 25', 'Apr 25', 'May 25', 'Jun 25'],
+                        datasets: [
+                            {
+                                label: 'Bitdefender Rating',
+                                data: [4.36, 4.51, 4.53, 4.45, 4.56, 4.56, 4.50, 4.53, 4.50, 4.42, 4.42, 4.48,
+                                       4.49, 4.44, 4.50, 4.33, 4.36, 4.50, 4.59, 4.59, 4.50, 4.46, 4.45, 4.32,
+                                       4.40, 4.51, 4.43, 4.44, 4.42, 4.51],
+                                borderColor: colors.bitdefender,
+                                backgroundColor: colors.bitdefender + '20',
+                                tension: 0.4,
+                                borderWidth: 3
+                            },
+                            {
+                                label: 'Norton Rating',
+                                data: [4.37, 4.27, 4.16, 4.20, 4.31, 4.28, 4.38, 4.29, 4.40, 4.47, 4.46, 4.36,
+                                       4.25, 4.28, 4.22, 4.36, 4.37, 4.32, 4.29, 4.27, 4.36, 4.22, 4.28, 4.25,
+                                       4.08, 4.24, 4.25, 4.18, 4.16, 3.99],
+                                borderColor: colors.norton,
+                                backgroundColor: colors.norton + '20',
+                                tension: 0.4,
+                                borderWidth: 3
+                            },
+                            {
+                                label: 'McAfee AntiVirus Plus Rating',
+                                data: [2.85, 2.68, 2.71, 2.51, 2.86, 2.77, 2.61, 2.91, 3.06, 3.18, 3.07, 3.27,
+                                       3.14, 3.48, 3.03, 3.14, 3.29, 3.51, 3.26, 3.35, 3.24, 3.38, 3.30, 3.30,
+                                       3.47, 3.42, 3.25, 3.55, 4.36, 4.36],
+                                borderColor: colors.mcafee,
+                                backgroundColor: colors.mcafee + '20',
+                                tension: 0.4,
+                                borderWidth: 3
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            y: { beginAtZero: true, max: 5 }
+                        },
+                        plugins: { legend: { position: 'top' } }
+                    }
+                });
+            }
+        }
+
+        function updateCharts(year) {
+            var data = yearData[year];
+            if (!data) return;
+            
+            if (marketShareChart) {
+                marketShareChart.data.datasets[0].data = data.marketShare;
+                marketShareChart.update();
+            }
+            
+            if (ratingChart) {
+                ratingChart.data.datasets[0].data = data.ratings;
+                ratingChart.update();
+            }
+            
+            if (issuesChart) {
+                var dist = data.ratingDistribution;
+                issuesChart.data.datasets[3].data = [dist.norton[1], dist.bitdefender[1], dist.mcafee[1]];
+                issuesChart.data.datasets[4].data = [dist.norton[0], dist.bitdefender[0], dist.mcafee[0]];
+                
+                var totals = data.marketShare;
+                issuesChart.data.labels = [
+                    'Norton 360\n(' + totals[0].toLocaleString() + ' reviews)',
+                    'Bitdefender Total Security\n(' + totals[1].toLocaleString() + ' reviews)',
+                    'McAfee AntiVirus Plus\n(' + totals[2].toLocaleString() + ' reviews)'
+                ];
+                
+                issuesChart.update();
+            }
+            
+            updateInsights(data, year);
+        }
+
+        function updateInsights(data, year) {
+            var totals = data.marketShare;
+            var dist = data.ratingDistribution;
+            
+            var bitdefender5Star = ((dist.bitdefender[4] / totals[1]) * 100).toFixed(1);
+            var bitdefenderPoor = (((dist.bitdefender[0] + dist.bitdefender[1]) / totals[1]) * 100).toFixed(1);
+            var mcafee5Star = ((dist.mcafee[4] / totals[2]) * 100).toFixed(1);
+            var mcafeePoor = (((dist.mcafee[0] + dist.mcafee[1]) / totals[2]) * 100).toFixed(1);
+            
+            var insightCard = document.querySelector('.insight-card.danger .insight-content');
+            if (insightCard) {
+                var totalMarket = totals.reduce(function(a,b) { return a+b; }, 0);
+                insightCard.innerHTML = '<strong>' + year + ' Analysis:</strong> Bitdefender shows ' + bitdefender5Star + '% excellent ratings (5★) with only ' + bitdefenderPoor + '% poor ratings (1-2★). McAfee shows ' + mcafee5Star + '% excellent vs ' + mcafeePoor + '% poor ratings. Total market: ' + totalMarket.toLocaleString() + ' reviews analyzed.';
+            }
+        }
+
         function animateNumbers() {
-            const stats = [
+            var stats = [
                 { id: 'totalReviews', target: 87368 },
                 { id: 'qualityLeader', target: 4.49, suffix: '★' },
                 { id: 'volumeLeader', target: 49250 },
-                { id: 'vulnerablePlayer', target: 3.16, suffix: '★' }
+                { id: 'vulnerablePlayer', target: 41.6, suffix: '%' }
             ];
 
-            stats.forEach(stat => {
-                const element = document.getElementById(stat.id);
+            stats.forEach(function(stat) {
+                var element = document.getElementById(stat.id);
                 if (element) {
-                    let current = 0;
-                    const increment = stat.target / 100;
+                    var current = 0;
+                    var increment = stat.target / 100;
                     
-                    const timer = setInterval(() => {
+                    var timer = setInterval(function() {
                         current += increment;
                         if (current >= stat.target) {
                             current = stat.target;
@@ -583,18 +772,38 @@
                         if (stat.id === 'totalReviews' || stat.id === 'volumeLeader') {
                             element.textContent = Math.floor(current).toLocaleString();
                         } else {
-                            element.textContent = current.toFixed(2) + (stat.suffix || '');
+                            element.textContent = current.toFixed(stat.id === 'vulnerablePlayer' ? 1 : 2) + (stat.suffix || '');
                         }
                     }, 20);
                 }
             });
         }
 
-        // Initialize on load
-        window.addEventListener('load', function() {
-            animateNumbers();
-            console.log('Google Play Store Antivirus Intelligence Dashboard Loaded');
+        document.addEventListener('DOMContentLoaded', function() {
+            try {
+                initializeCharts();
+                animateNumbers();
+                
+                var yearSlider = document.getElementById('yearSlider');
+                if (yearSlider) {
+                    yearSlider.addEventListener('input', function(e) {
+                        var year = parseInt(e.target.value);
+                        var yearValueEl = document.getElementById('yearValue');
+                        if (yearValueEl) {
+                            yearValueEl.textContent = year;
+                        }
+                        updateCharts(year);
+                    });
+                }
+                
+                console.log('Dashboard loaded successfully');
+            } catch (error) {
+                console.error('Error initializing dashboard:', error);
+            }
         });
     </script>
 </body>
-</html>
+</html>data.datasets[0].data = [dist.norton[4], dist.bitdefender[4], dist.mcafee[4]];
+                issuesChart.data.datasets[1].data = [dist.norton[3], dist.bitdefender[3], dist.mcafee[3]];
+                issuesChart.data.datasets[2].data = [dist.norton[2], dist.bitdefender[2], dist.mcafee[2]];
+                issuesChart.
