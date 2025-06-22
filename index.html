@@ -340,7 +340,10 @@
             🤖 100% AI-Processed • 87,368 Reviews Analyzed
         </div>
         <div class="data-source">
-            <strong>Data Timeframe:</strong> 2023-2025 (Complete Dataset) • <strong>Platform:</strong> Google Play Store Only • <strong>Coverage:</strong> Norton 360, Bitdefender Total Security, McAfee AntiVirus Plus • <strong>Updated:</strong> June 22, 2025
+            <strong>Data Timeframe:</strong> 2023-2025 (Complete Dataset) • <strong>Platform:</strong> Google Play Store Only • <strong>Coverage:</strong> Norton 360, Bitdefender Total Security, McAfee • <strong>Updated:</strong> June 22, 2025
+        </div>
+        <div class="data-source" style="margin-top: 0.5rem; font-size: 0.85rem; opacity: 0.9;">
+            <strong>Data Note:</strong> McAfee reviews consolidated from "McAfee AntiVirus Plus" and "McAfee Total Protection" products for comprehensive analysis (4,653 reviews merged)
         </div>
         <nav class="nav-menu">
             <a href="#dashboard">📊 Executive Dashboard</a>
@@ -385,8 +388,8 @@
                     <div class="card-title">Vulnerable Player</div>
                     <div class="card-icon icon-vulnerable">⚠️</div>
                 </div>
-                <div class="card-value" id="vulnerablePlayer">41.6%</div>
-                <div class="card-change change-warning">▼ McAfee AntiVirus Plus (Critical Issues)</div>
+                <div class="card-value" id="vulnerablePlayer">3.62★</div>
+                <div class="card-change change-warning">▲ McAfee (2025 Recovery)</div>
             </div>
         </div>
     </div>
@@ -447,7 +450,7 @@
             <div class="insight-card danger">
                 <div class="insight-title">⚠️ Rating Distribution Insights</div>
                 <div class="insight-content">
-                    <strong>2025 Analysis:</strong> Bitdefender shows 77.3% excellent ratings (5★) with only 9.5% poor ratings (1-2★). McAfee shows 49.4% excellent vs 35.7% poor ratings. Total market: 10,205 reviews analyzed.
+                    <strong>2025 Analysis:</strong> Bitdefender shows 77.3% excellent ratings (5★) with only 9.5% poor ratings (1-2★). McAfee shows 54.4% excellent vs 30.9% poor ratings. Total market: 10,711 reviews analyzed.
                 </div>
             </div>
         </div>
@@ -457,7 +460,7 @@
         <h3>Google Play Store Antivirus Intelligence Platform</h3>
         <p>Powered by AI Analysis of 87,368 Reviews | 100% Processing Complete | Real-Time Market Insights</p>
         <p style="margin-top: 1rem; opacity: 0.8;">
-            Norton 360: 49,250 reviews • Bitdefender: 23,471 reviews • McAfee AntiVirus Plus: 14,147 reviews
+            Norton 360: 49,250 reviews • Bitdefender: 23,471 reviews • McAfee: 14,653 reviews
         </p>
     </footer>
 
@@ -502,12 +505,12 @@
                 }
             },
             2025: {
-                marketShare: [6372, 3023, 810],
-                ratings: [4.26, 4.47, 3.43],
+                marketShare: [6372, 3023, 1316],
+                ratings: [4.26, 4.47, 3.62],
                 ratingDistribution: {
                     norton: [788, 169, 207, 665, 4543],
                     bitdefender: [225, 63, 111, 287, 2337],
-                    mcafee: [223, 66, 57, 64, 400]
+                    mcafee: [322, 84, 84, 110, 716]
                 }
             }
         };
@@ -518,9 +521,9 @@
                 marketShareChart = new Chart(marketShareCtx.getContext('2d'), {
                     type: 'doughnut',
                     data: {
-                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus'],
+                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee'],
                         datasets: [{
-                            data: [6372, 3023, 810],
+                            data: [6372, 3023, 1316],
                             backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
                             borderWidth: 3,
                             borderColor: '#fff'
@@ -584,10 +587,10 @@
                 ratingChart = new Chart(ratingCtx.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee AntiVirus Plus'],
+                        labels: ['Norton 360', 'Bitdefender Total Security', 'McAfee'],
                         datasets: [{
                             label: 'Average Rating',
-                            data: [4.26, 4.47, 3.43],
+                            data: [4.26, 4.47, 3.62],
                             backgroundColor: [colors.norton, colors.bitdefender, colors.mcafee],
                             borderRadius: 8
                         }]
@@ -636,11 +639,11 @@
                 issuesChart = new Chart(issuesCtx.getContext('2d'), {
                     type: 'bar',
                     data: {
-                        labels: ['Norton 360\n(6,372 reviews)', 'Bitdefender Total Security\n(3,023 reviews)', 'McAfee AntiVirus Plus\n(810 reviews)'],
+                        labels: ['Norton 360\n(6,372 reviews)', 'Bitdefender Total Security\n(3,023 reviews)', 'McAfee\n(1,316 reviews)'],
                         datasets: [
                             {
                                 label: '5★ Excellent',
-                                data: [4543, 2337, 400],
+                                data: [4543, 2337, 716],
                                 backgroundColor: '#38a169'
                             },
                             {
@@ -691,7 +694,7 @@
                                 callbacks: {
                                     label: function(context) {
                                         var productIndex = context.dataIndex;
-                                        var total = productIndex === 0 ? 6372 : productIndex === 1 ? 3023 : 810;
+                                        var total = productIndex === 0 ? 6372 : productIndex === 1 ? 3023 : 1316;
                                         var percentage = ((context.parsed.y / total) * 100).toFixed(1);
                                         return context.dataset.label + ': ' + context.parsed.y.toLocaleString() + ' reviews (' + percentage + '%)';
                                     }
@@ -732,10 +735,10 @@
                                 borderWidth: 3
                             },
                             {
-                                label: 'McAfee AntiVirus Plus Rating',
+                                label: 'McAfee Rating',
                                 data: [2.85, 2.68, 2.71, 2.51, 2.86, 2.77, 2.61, 2.91, 3.06, 3.18, 3.07, 3.27,
                                        3.14, 3.48, 3.03, 3.14, 3.29, 3.51, 3.26, 3.35, 3.24, 3.38, 3.30, 3.30,
-                                       3.47, 3.42, 3.25, 3.55, 4.36, 4.36],
+                                       3.47, 3.42, 3.25, 3.55, 3.90, 3.96],
                                 borderColor: colors.mcafee,
                                 backgroundColor: colors.mcafee + '20',
                                 tension: 0.4,
@@ -812,7 +815,7 @@
                 issuesChart.data.labels = [
                     'Norton 360\n(' + totals[0].toLocaleString() + ' reviews)',
                     'Bitdefender Total Security\n(' + totals[1].toLocaleString() + ' reviews)',
-                    'McAfee AntiVirus Plus\n(' + totals[2].toLocaleString() + ' reviews)'
+                    'McAfee\n(' + totals[2].toLocaleString() + ' reviews)'
                 ];
                 
                 issuesChart.update();
@@ -842,7 +845,7 @@
                 { id: 'totalReviews', target: 87368 },
                 { id: 'qualityLeader', target: 4.49, suffix: '★' },
                 { id: 'volumeLeader', target: 49250 },
-                { id: 'vulnerablePlayer', target: 41.6, suffix: '%' }
+                { id: 'vulnerablePlayer', target: 3.62, suffix: '★' }
             ];
 
             stats.forEach(function(stat) {
@@ -861,7 +864,7 @@
                         if (stat.id === 'totalReviews' || stat.id === 'volumeLeader') {
                             element.textContent = Math.floor(current).toLocaleString();
                         } else {
-                            element.textContent = current.toFixed(stat.id === 'vulnerablePlayer' ? 1 : 2) + (stat.suffix || '');
+                            element.textContent = current.toFixed(2) + (stat.suffix || '');
                         }
                     }, 20);
                 }
