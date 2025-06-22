@@ -280,7 +280,7 @@
         }
 
         .chart-large {
-            grid-column: span 2;
+            grid-column: 1 / -1;
             height: 450px;
         }
 
@@ -549,8 +549,10 @@
                             var ctx = chart.ctx;
                             ctx.save();
                             ctx.font = 'bold 12px Inter';
-                            ctx.fillStyle = '#2d3748';
+                            ctx.fillStyle = '#ffffff';
                             ctx.textAlign = 'center';
+                            ctx.strokeStyle = '#2d3748';
+                            ctx.lineWidth = 2;
                             
                             var total = chart.data.datasets[0].data.reduce(function(a, b) { return a + b; }, 0);
                             
@@ -563,6 +565,11 @@
                                 var x = arc.x + Math.cos(midAngle) * (arc.outerRadius * 0.7);
                                 var y = arc.y + Math.sin(midAngle) * (arc.outerRadius * 0.7);
                                 
+                                // Draw text stroke (outline) first
+                                ctx.strokeText(percentage + '%', x, y - 5);
+                                ctx.strokeText(datapoint.toLocaleString(), x, y + 8);
+                                
+                                // Draw filled text on top
                                 ctx.fillText(percentage + '%', x, y - 5);
                                 ctx.fillText(datapoint.toLocaleString(), x, y + 8);
                             });
@@ -771,8 +778,8 @@
                         },
                         layout: {
                             padding: {
-                                left: 10,
-                                right: 10,
+                                left: 5,
+                                right: 5,
                                 top: 10,
                                 bottom: 10
                             }
