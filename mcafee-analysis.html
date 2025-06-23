@@ -214,11 +214,15 @@ body {
     line-height: 1.4;
 }
 
+
+
 .examples-section {
-    margin: 2rem 0;
-    padding: 1.5rem;
+    margin: 1rem 0;            /* half the vertical gap */
+    padding: 1rem;             /* a bit less padding */
     background: var(--light-gray);
     border-radius: 12px;
+    max-height: 220px;         /* cap the height */
+    overflow-y: auto;          /* scroll if content exceeds */
 }
 
 .examples-title {
