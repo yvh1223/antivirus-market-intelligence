@@ -163,6 +163,12 @@ body {
     height: 450px;
 }
 
+.chart-large {
+    grid-column: span 2;
+    height: auto;
+    min-height: 450px;
+}
+
 .legend-section {
     margin: 2rem 0;
     padding: 1.5rem;
@@ -242,28 +248,7 @@ body {
     .summary-cards { grid-template-columns: 1fr; }
     .legend-grid { grid-template-columns: 1fr; }
 }
-
-/* make the grid row height always grow to fit its content */
-.charts-grid {
-    grid-auto-rows: min-content;          /* each row is as tall as its tallest child */
-  }
-  
-  /* target only the big “span-2” chart containers */
-  .chart-container.chart-large {
-    height: auto !important;              /* let it grow */
-    min-height: 450px !important;         /* but never shrink below this */
-  }
-  
-  /* mobile media too */
-  @media (max-width: 768px) {
-    .chart-container.chart-large {
-      height: auto !important;
-      min-height: 350px !important;
-    }
-  }
-
 </style>
-
 </head>
 <body>
 <header class="header">
@@ -356,29 +341,40 @@ body {
         <canvas id="ratingChart" width="400" height="300"></canvas>
     </div>
 
-    <div class="chart-container chart-large">
-        <h3 class="chart-title">🎯 Cross-Domain NFR Analysis</h3>
-        <div class="chart-subtitle">How reliability, security, and scalability concerns distribute across product domains</div>
-        <canvas id="domainNfrChart" width="800" height="350"></canvas>
-        <div class="examples-section">
-            <div class="examples-title">💡 Cross-Domain Analysis Examples</div>
-            <div class="example-item">
-                <span class="example-label">Product Features + Reliability:</span> "VPN keeps disconnecting", "App crashes frequently", "UI freezes during scans"
-            </div>
-            <div class="example-item">
-                <span class="example-label">Product Core + Security:</span> "Missed malware detection", "False positive scans", "Virus not caught"
-            </div>
-            <div class="example-item">
-                <span class="example-label">Billing + Reliability:</span> "Payment failed but charged", "Auto-renewal issues", "Can't cancel subscription"
-            </div>
-        </div>
+    <!-- 1) Cross-Domain NFR Analysis chart by itself -->
+<div class="chart-container chart-large">
+    <h3 class="chart-title">🎯 Cross-Domain NFR Analysis</h3>
+    <div class="chart-subtitle">
+      How reliability, security, and scalability concerns distribute across product domains
     </div>
-
-    <div class="chart-container chart-large">
-        <h3 class="chart-title">📊 Lifecycle vs Rating Performance</h3>
-        <div class="chart-subtitle">Average ratings across lifecycle stages (bubble size = review volume)</div>
-        <canvas id="lifecycleRatingChart" width="800" height="350"></canvas>
+    <canvas id="domainNfrChart" width="800" height="350"></canvas>
+  </div>
+  
+  <!-- 2) Standalone examples spanning both columns -->
+  <div class="examples-section" style="grid-column: span 2;">
+    <div class="examples-title">💡 Cross-Domain Analysis Examples</div>
+    <div class="example-item">
+      <span class="example-label">Product Features + Reliability:</span>
+      "VPN keeps disconnecting", "App crashes frequently", "UI freezes during scans"
     </div>
+    <div class="example-item">
+      <span class="example-label">Product Core + Security:</span>
+      "Missed malware detection", "False positive scans", "Virus not caught"
+    </div>
+    <div class="example-item">
+      <span class="example-label">Billing + Reliability:</span>
+      "Payment failed but charged", "Auto-renewal issues", "Can't cancel subscription"
+    </div>
+  </div>
+  
+  <!-- 3) Lifecycle vs Rating chart -->
+  <div class="chart-container chart-large">
+    <h3 class="chart-title">📊 Lifecycle vs Rating Performance</h3>
+    <div class="chart-subtitle">
+      Average ratings across lifecycle stages (bubble size = review volume)
+    </div>
+    <canvas id="lifecycleRatingChart" width="800" height="350"></canvas>
+  </div>
 </div>
 
 <div class="examples-section">
