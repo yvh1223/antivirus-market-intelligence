@@ -243,7 +243,28 @@ body {
     .summary-cards { grid-template-columns: 1fr; }
     .legend-grid { grid-template-columns: 1fr; }
 }
+
+/* make the grid row height always grow to fit its content */
+.charts-grid {
+    grid-auto-rows: min-content;          /* each row is as tall as its tallest child */
+  }
+  
+  /* target only the big “span-2” chart containers */
+  .chart-container.chart-large {
+    height: auto !important;              /* let it grow */
+    min-height: 450px !important;         /* but never shrink below this */
+  }
+  
+  /* mobile media too */
+  @media (max-width: 768px) {
+    .chart-container.chart-large {
+      height: auto !important;
+      min-height: 350px !important;
+    }
+  }
+  
 </style>
+
 </head>
 <body>
 <header class="header">
