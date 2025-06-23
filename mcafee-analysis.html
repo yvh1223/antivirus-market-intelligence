@@ -1,814 +1,765 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>McAfee Reviews Analytics Dashboard</title>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
-<style>
-:root {
-    --primary-red: #d32f2f;
-    --secondary-red: #f44336;
-    --accent-orange: #ff9800;
-    --success-green: #4caf50;
-    --warning-amber: #ffc107;
-    --danger-red: #f44336;
-    --light-gray: #f8f9fa;
-    --border-gray: #e0e0e0;
-    --text-dark: #212121;
-    --text-light: #757575;
-    --info-blue: #2196f3;
-    --background-white: #ffffff;
-    --positive-green: #4caf50;
-    --neutral-orange: #ff9800;
-    --negative-red: #f44336;
-}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>McAfee Reviews Analytics Dashboard</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-red: #d32f2f;
+            --secondary-red: #f44336;
+            --accent-orange: #ff9800;
+            --success-green: #4caf50;
+            --warning-amber: #ffc107;
+            --danger-red: #f44336;
+            --light-gray: #f8f9fa;
+            --border-gray: #e0e0e0;
+            --text-dark: #212121;
+            --text-light: #757575;
+            --info-blue: #2196f3;
+            --background-white: #ffffff;
+            --positive-green: #4caf50;
+            --neutral-orange: #ff9800;
+            --negative-red: #f44336;
+        }
 
-* { margin: 0; padding: 0; box-sizing: border-box; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
-body {
-    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-    background: linear-gradient(135deg, var(--light-gray) 0%, var(--background-white) 100%);
-    color: var(--text-dark);
-    line-height: 1.6;
-}
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, var(--light-gray) 0%, var(--background-white) 100%);
+            color: var(--text-dark);
+            line-height: 1.6;
+        }
 
-.header {
-    background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
-    color: white;
-    padding: 3rem 0;
-    text-align: center;
-    box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
-}
+        .header {
+            background: linear-gradient(135deg, var(--primary-red) 0%, var(--secondary-red) 100%);
+            color: white;
+            padding: 3rem 0;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(211, 47, 47, 0.3);
+        }
 
-.header h1 {
-    font-size: 3rem;
-    font-weight: 800;
-    margin-bottom: 0.5rem;
-}
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
 
-.ai-badge {
-    background: linear-gradient(135deg, var(--accent-orange), #ffb74d);
-    color: var(--text-dark);
-    padding: 0.5rem 1.5rem;
-    border-radius: 25px;
-    font-weight: 700;
-    font-size: 0.9rem;
-    display: inline-block;
-    margin: 1rem 0;
-}
+        .ai-badge {
+            background: linear-gradient(135deg, var(--accent-orange), #ffb74d);
+            color: var(--text-dark);
+            padding: 0.5rem 1.5rem;
+            border-radius: 25px;
+            font-weight: 700;
+            font-size: 0.9rem;
+            display: inline-block;
+            margin: 1rem 0;
+        }
 
-.data-source {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 1rem;
-    margin: 1rem auto;
-    max-width: 800px;
-}
+        .data-source {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            padding: 1rem;
+            margin: 1rem auto;
+            max-width: 800px;
+        }
 
-.summary-section {
-    max-width: 1400px;
-    margin: 3rem auto;
-    padding: 0 2rem;
-}
+        .summary-section {
+            max-width: 1400px;
+            margin: 3rem auto;
+            padding: 0 2rem;
+        }
 
-.summary-cards {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin-bottom: 3rem;
-}
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
 
-.summary-card {
-    background: var(--background-white);
-    padding: 1.5rem;
-    border-radius: 12px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border-left: 4px solid var(--primary-red);
-    transition: transform 0.3s ease;
-}
+        .summary-card {
+            background: var(--background-white);
+            padding: 1.5rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border-left: 4px solid var(--primary-red);
+            transition: transform 0.3s ease;
+        }
 
-.summary-card:hover {
-    transform: translateY(-3px);
-}
+        .summary-card:hover {
+            transform: translateY(-3px);
+        }
 
-.card-title {
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--text-light);
-    text-transform: uppercase;
-    margin-bottom: 0.5rem;
-}
+        .card-title {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text-light);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
 
-.card-value {
-    font-size: 2rem;
-    font-weight: 800;
-    color: var(--text-dark);
-    margin-bottom: 0.5rem;
-}
+        .card-value {
+            font-size: 2rem;
+            font-weight: 800;
+            color: var(--text-dark);
+            margin-bottom: 0.5rem;
+        }
 
-.card-description {
-    font-size: 0.85rem;
-    color: var(--text-light);
-}
+        .card-description {
+            font-size: 0.85rem;
+            color: var(--text-light);
+        }
 
-.analytics-section {
-    max-width: 1600px;
-    margin: 0 auto;
-    padding: 2rem;
-}
+        .analytics-section {
+            max-width: 1600px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-.section-title {
-    font-size: 2rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 2rem;
-    text-align: center;
-}
+        .section-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 2rem;
+            text-align: center;
+        }
 
-.charts-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
-    gap: 2rem;
-    margin-bottom: 3rem;
-}
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 2rem;
+            margin-bottom: 3rem;
+        }
 
-.chart-container {
-    background: var(--background-white);
-    padding: 2rem;
-    border-radius: 16px;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-    border: 1px solid var(--border-gray);
-}
+        .chart-container {
+            background: var(--background-white);
+            padding: 2rem;
+            border-radius: 16px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            border: 1px solid var(--border-gray);
+        }
 
-.chart-title {
-    font-size: 1.2rem;
-    font-weight: 700;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-    text-align: center;
-}
+        .chart-title {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+            text-align: center;
+        }
 
-.chart-subtitle {
-    font-size: 0.9rem;
-    color: var(--text-light);
-    margin-bottom: 1.5rem;
-    text-align: center;
-    line-height: 1.4;
-}
+        .chart-subtitle {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            text-align: center;
+            line-height: 1.4;
+        }
 
-.chart-large {
-    grid-column: span 2;
-    height: 450px;
-}
+        .chart-large {
+            grid-column: span 2;
+            height: 450px;
+        }
 
-.chart-large {
-    grid-column: span 2;
-    height: auto;
-    min-height: 450px;
-}
+        .legend-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--background-white);
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
 
-.legend-section {
-    margin: 2rem 0;
-    padding: 1.5rem;
-    background: var(--background-white);
-    border-radius: 12px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
-}
+        .legend-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
 
-.legend-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-}
+        .legend-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+        }
 
-.legend-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-    gap: 1.5rem;
-}
+        .legend-item {
+            padding: 1rem;
+            border-left: 4px solid;
+            background: rgba(0, 0, 0, 0.02);
+            border-radius: 4px;
+            margin-bottom: 0.75rem;
+        }
 
-.legend-item {
-    padding: 1rem;
-    border-left: 4px solid;
-    background: rgba(0, 0, 0, 0.02);
-    border-radius: 4px;
-    margin-bottom: 0.75rem;
-}
+        .legend-item.positive { border-left-color: var(--positive-green); }
+        .legend-item.neutral { border-left-color: var(--neutral-orange); }
+        .legend-item.negative { border-left-color: var(--negative-red); }
 
-.legend-item.positive { border-left-color: var(--positive-green); }
-.legend-item.neutral { border-left-color: var(--neutral-orange); }
-.legend-item.negative { border-left-color: var(--negative-red); }
+        .legend-item-title {
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+            line-height: 1.3;
+        }
 
-.legend-item-title {
-    font-weight: 600;
-    margin-bottom: 0.5rem;
-    line-height: 1.3;
-}
+        .legend-item-desc {
+            font-size: 0.85rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
 
-.legend-item-desc {
-    font-size: 0.85rem;
-    color: var(--text-light);
-    line-height: 1.4;
-}
+        .examples-section {
+            margin: 2rem 0;
+            padding: 1.5rem;
+            background: var(--light-gray);
+            border-radius: 12px;
+        }
 
+        .examples-title {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--text-dark);
+            margin-bottom: 1rem;
+        }
 
+        .example-item {
+            margin-bottom: 0.75rem;
+            padding: 0.5rem;
+            background: var(--background-white);
+            border-radius: 6px;
+            font-size: 0.9rem;
+        }
 
-.examples-section {
-    margin: 1rem 0;            /* half the vertical gap */
-    padding: 1rem;             /* a bit less padding */
-    background: var(--light-gray);
-    border-radius: 12px;
-    max-height: 220px;         /* cap the height */
-    overflow-y: auto;          /* scroll if content exceeds */
-}
+        .example-label {
+            font-weight: 600;
+            color: var(--primary-red);
+        }
 
-.examples-title {
-    font-size: 1.1rem;
-    font-weight: 600;
-    color: var(--text-dark);
-    margin-bottom: 1rem;
-}
-
-.example-item {
-    margin-bottom: 0.75rem;
-    padding: 0.5rem;
-    background: var(--background-white);
-    border-radius: 6px;
-    font-size: 0.9rem;
-}
-
-.example-label {
-    font-weight: 600;
-    color: var(--primary-red);
-}
-
-@media (max-width: 768px) {
-    .charts-grid { grid-template-columns: 1fr; }
-    .chart-large { grid-column: span 1; height: 350px; }
-    .header h1 { font-size: 2rem; }
-    .summary-cards { grid-template-columns: 1fr; }
-    .legend-grid { grid-template-columns: 1fr; }
-}
-</style>
+        @media (max-width: 768px) {
+            .charts-grid { grid-template-columns: 1fr; }
+            .chart-large { grid-column: span 1; height: 350px; }
+            .header h1 { font-size: 2rem; }
+            .summary-cards { grid-template-columns: 1fr; }
+            .legend-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-<header class="header">
-<h1>McAfee Reviews Analytics</h1>
-<p>Advanced AI-Powered Review Analysis Dashboard</p>
-<div class="ai-badge">
-    🤖 15,153 Reviews Analyzed • 100% AI-Enhanced Categories
-</div>
-<div class="data-source">
-    <strong>Dataset:</strong> Google Play Store Reviews (2023-2025) • 
-    <strong>Analysis:</strong> Lifecycle Stage, Leadership NFR, Domain Classification • 
-    <strong>Last Updated:</strong> June 22, 2025
-</div>
-</header>
-
-<div class="summary-section">
-<div class="summary-cards">
-    <div class="summary-card">
-        <div class="card-title">Total Reviews</div>
-        <div class="card-value" id="totalReviews">15,153</div>
-        <div class="card-description">Complete dataset analyzed</div>
-    </div>
-    <div class="summary-card">
-        <div class="card-title">Average Rating</div>
-        <div class="card-value" id="avgRating">3.16★</div>
-        <div class="card-description">Overall user satisfaction</div>
-    </div>
-    <div class="summary-card">
-        <div class="card-title">Top Lifecycle Stage</div>
-        <div class="card-value" id="topLifecycle">Usage</div>
-        <div class="card-description">43.7% of all reviews</div>
-    </div>
-    <div class="summary-card">
-        <div class="card-title">Primary NFR</div>
-        <div class="card-value" id="primaryNfr">Reliability</div>
-        <div class="card-description">81.9% focus area</div>
-    </div>
-    <div class="summary-card">
-        <div class="card-title">Main Domain</div>
-        <div class="card-value" id="mainDomain">Features</div>
-        <div class="card-description">61.6% of feedback</div>
-    </div>
-</div>
-
-<div class="examples-section">
-    <div class="examples-title">🎯 Cross-Domain NFR Examples - Real User Issues by Category</div>
-    <div class="example-item">
-        <span class="example-label">🔧 Product Features + Reliability Issues:</span> "VPN keeps disconnecting", "App crashes frequently", "UI freezes during scans", "Password manager not syncing"
-    </div>
-    <div class="example-item">
-        <span class="example-label">🛡️ Product Core + Security Issues:</span> "Missed malware detection", "False positive scans", "Virus not caught", "Real-time protection failed"
-    </div>
-    <div class="example-item">
-        <span class="example-label">🔧 Billing + Reliability Issues:</span> "Payment failed but charged", "Auto-renewal issues", "Can't cancel subscription", "Refund not processed"
-    </div>
-    <div class="example-item">
-        <span class="example-label">🔧 Customer Support + Reliability Issues:</span> "No response to tickets", "Chat not working", "Long wait times", "Unhelpful agents"
-    </div>
-    <div class="example-item">
-        <span class="example-label">⚡ Endpoint Integration + Scalability Issues:</span> "Slows down phone", "Battery drains fast", "Too much memory usage", "Makes device hot"
-    </div>
-</div>
-</div>
-
-<div class="analytics-section">
-<h2 class="section-title">📈 Advanced Analytics Dashboard</h2>
-
-<div class="charts-grid">
-    <div class="chart-container">
-        <h3 class="chart-title">🔄 Lifecycle Stage Distribution</h3>
-        <div class="chart-subtitle">User journey stages from installation to uninstall</div>
-        <canvas id="lifecycleChart" width="400" height="300"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h3 class="chart-title">⚡ Leadership NFR Analysis</h3>
-        <div class="chart-subtitle">Non-functional requirements driving user feedback</div>
-        <canvas id="nfrChart" width="400" height="300"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h3 class="chart-title">🏢 Domain Category Breakdown</h3>
-        <div class="chart-subtitle">Product areas mentioned in user reviews</div>
-        <canvas id="domainChart" width="400" height="300"></canvas>
-    </div>
-
-    <div class="chart-container">
-        <h3 class="chart-title">⭐ Rating Distribution</h3>
-        <div class="chart-subtitle">User satisfaction levels across 1-5 star ratings</div>
-        <canvas id="ratingChart" width="400" height="300"></canvas>
-    </div>
-
-    <!-- 1) Cross-Domain NFR Analysis chart by itself -->
-<div class="chart-container chart-large">
-    <h3 class="chart-title">🎯 Cross-Domain NFR Analysis</h3>
-    <div class="chart-subtitle">
-      How reliability, security, and scalability concerns distribute across product domains
-    </div>
-    <canvas id="domainNfrChart" width="800" height="350"></canvas>
-  </div>
-  
-  <!-- 2) Standalone examples spanning both columns -->
-  <div class="examples-section" style="grid-column: span 2;">
-    <div class="examples-title">💡 Cross-Domain Analysis Examples</div>
-    <div class="example-item">
-      <span class="example-label">Product Features + Reliability:</span>
-      "VPN keeps disconnecting", "App crashes frequently", "UI freezes during scans"
-    </div>
-    <div class="example-item">
-      <span class="example-label">Product Core + Security:</span>
-      "Missed malware detection", "False positive scans", "Virus not caught"
-    </div>
-    <div class="example-item">
-      <span class="example-label">Billing + Reliability:</span>
-      "Payment failed but charged", "Auto-renewal issues", "Can't cancel subscription"
-    </div>
-  </div>
-  
-  <!-- 3) Lifecycle vs Rating chart -->
-  <div class="chart-container chart-large">
-    <h3 class="chart-title">📊 Lifecycle vs Rating Performance</h3>
-    <div class="chart-subtitle">
-      Average ratings across lifecycle stages (bubble size = review volume)
-    </div>
-    <canvas id="lifecycleRatingChart" width="800" height="350"></canvas>
-  </div>
-</div>
-
-<div class="examples-section">
-    <div class="examples-title">💡 Complete Lifecycle Examples - How AI Classified Real Reviews</div>
-    <div class="example-item">
-        <span class="example-label">✅ Satisfaction Expression (4.2★, 10.0%):</span> "Thanks!", "Love it!", "5 stars!", "Great app!", "Perfect protection!"
-    </div>
-    <div class="example-item">
-        <span class="example-label">💬 General Feedback (3.8★, 17.2%):</span> "Overall good experience", "Decent antivirus", "Pretty satisfied", "Works fine for me"
-    </div>
-    <div class="example-item">
-        <span class="example-label">📱 Usage (3.2★, 43.7%):</span> "Works but has bugs", "Good protection, slow scans", "App freezes sometimes", "VPN disconnects often"
-    </div>
-    <div class="example-item">
-        <span class="example-label">❓ Unrelated (3.1★, 17.0%):</span> "Weather is nice today", "Wrong app downloaded", "Can't understand interface", "Random text"
-    </div>
-    <div class="example-item">
-        <span class="example-label">🚀 Onboarding (2.8★, 6.9%):</span> "Can't install", "Setup keeps failing", "Confusing first time", "Registration not working"
-    </div>
-    <div class="example-item">
-        <span class="example-label">❌ Uninstall (2.1★, 3.9%):</span> "Switching to competitor", "Removing due to issues", "Uninstalling now", "Going back to free version"
-    </div>
-    <div class="example-item">
-        <span class="example-label">🔧 Feature Requests (3.5★, 1.3%):</span> "Please add dark mode", "Would be nice if faster", "Include password manager", "Need better notifications"
-    </div>
-</div>
-</div>
-
-<div class="legend-section">
-    <div class="legend-title">📚 Lifecycle Stage Definitions</div>
-    <div class="legend-grid">
-        <div class="legend-item positive">
-            <div class="legend-item-title">✅ Satisfaction Expression (10.0%)</div>
-            <div class="legend-item-desc">Brief positive feedback: "Thanks!", "Love it!", "5 stars!", general appreciation without details</div>
+    <header class="header">
+        <h1>McAfee Reviews Analytics</h1>
+        <p>Advanced AI-Powered Review Analysis Dashboard</p>
+        <div class="ai-badge">
+            🤖 15,153 Reviews Analyzed • 100% AI-Enhanced Categories
         </div>
-        <div class="legend-item neutral">
-            <div class="legend-item-title">💬 General Feedback (17.2%)</div>
-            <div class="legend-item-desc">Overall experience sharing without specific technical issues or feature mentions</div>
+        <div class="data-source">
+            <strong>Dataset:</strong> Google Play Store Reviews (2023-2025) • 
+            <strong>Analysis:</strong> Lifecycle Stage, Leadership NFR, Domain Classification • 
+            <strong>Last Updated:</strong> June 22, 2025
         </div>
-        <div class="legend-item neutral">
-            <div class="legend-item-title">🔧 Feature Requests (1.3%)</div>
-            <div class="legend-item-desc">Improvement suggestions: "Would be nice if...", "Please add...", new feature ideas</div>
-        </div>
-        <div class="legend-item neutral">
-            <div class="legend-item-title">📱 Usage (43.7%)</div>
-            <div class="legend-item-desc">Daily operational feedback: performance complaints, feature issues, regular use problems</div>
-        </div>
-        <div class="legend-item negative">
-            <div class="legend-item-title">🚀 Onboarding (6.9%)</div>
-            <div class="legend-item-desc">Initial setup problems: installation failures, configuration difficulties, first-time user confusion</div>
-        </div>
-        <div class="legend-item negative">
-            <div class="legend-item-title">❌ Uninstall (3.9%)</div>
-            <div class="legend-item-desc">Removal intent: switching to competitors, uninstalling due to persistent issues</div>
-        </div>
-        <div class="legend-item neutral">
-            <div class="legend-item-title">❓ Unrelated (17.0%)</div>
-            <div class="legend-item-desc">Off-topic content: unclear context, insufficient information, non-product related</div>
+    </header>
+
+    <div class="summary-section">
+        <div class="summary-cards">
+            <div class="summary-card">
+                <div class="card-title">Total Reviews</div>
+                <div class="card-value" id="totalReviews">15,153</div>
+                <div class="card-description">Complete dataset analyzed</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">Average Rating</div>
+                <div class="card-value" id="avgRating">3.16★</div>
+                <div class="card-description">Overall user satisfaction</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">Top Lifecycle Stage</div>
+                <div class="card-value" id="topLifecycle">Usage</div>
+                <div class="card-description">43.7% of all reviews</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">Primary NFR</div>
+                <div class="card-value" id="primaryNfr">Reliability</div>
+                <div class="card-description">81.9% focus area</div>
+            </div>
+            <div class="summary-card">
+                <div class="card-title">Main Domain</div>
+                <div class="card-value" id="mainDomain">Features</div>
+                <div class="card-description">61.6% of feedback</div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="legend-section">
-    <div class="legend-title">⚠️ Leadership NFR Issues (All Represent Problems)</div>
-    <div class="legend-grid">
-        <div class="legend-item negative">
-            <div class="legend-item-title">🔧 Reliability Issues (81.9%)</div>
-            <div class="legend-item-desc">App crashes, performance slowdowns, UI glitches, billing failures, poor support response</div>
+    <div class="analytics-section">
+        <h2 class="section-title">📈 Advanced Analytics Dashboard</h2>
+        
+        <div class="charts-grid">
+            <div class="chart-container">
+                <h3 class="chart-title">🔄 Lifecycle Stage Distribution</h3>
+                <div class="chart-subtitle">User journey stages from installation to uninstall</div>
+                <canvas id="lifecycleChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">⚡ Leadership NFR Analysis</h3>
+                <div class="chart-subtitle">Non-functional requirements driving user feedback</div>
+                <canvas id="nfrChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">🏢 Domain Category Breakdown</h3>
+                <div class="chart-subtitle">Product areas mentioned in user reviews</div>
+                <canvas id="domainChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container">
+                <h3 class="chart-title">⭐ Rating Distribution</h3>
+                <div class="chart-subtitle">User satisfaction levels across 1-5 star ratings</div>
+                <canvas id="ratingChart" width="400" height="300"></canvas>
+            </div>
+
+            <div class="chart-container chart-large">
+                <h3 class="chart-title">🎯 Cross-Domain NFR Analysis</h3>
+                <div class="chart-subtitle">How reliability, security, and scalability concerns distribute across product domains</div>
+                <canvas id="domainNfrChart" width="800" height="350"></canvas>
+                <div class="examples-section">
+                    <div class="examples-title">💡 Analysis Examples</div>
+                    <div class="example-item">
+                        <span class="example-label">Product Features + Reliability:</span> "VPN keeps disconnecting", "App crashes frequently"
+                    </div>
+                    <div class="example-item">
+                        <span class="example-label">Product Core + Security:</span> "Missed malware detection", "False positive scans"
+                    </div>
+                    <div class="example-item">
+                        <span class="example-label">Billing + Reliability:</span> "Payment failed but charged", "Auto-renewal issues"
+                    </div>
+                </div>
+            </div>
+
+            <div class="chart-container chart-large">
+                <h3 class="chart-title">📊 Lifecycle vs Rating Performance</h3>
+                <div class="chart-subtitle">Average ratings across lifecycle stages (bubble size = review volume)</div>
+                <canvas id="lifecycleRatingChart" width="800" height="350"></canvas>
+            </div>
         </div>
-        <div class="legend-item negative">
-            <div class="legend-item-title">🛡️ Security Issues (15.4%)</div>
-            <div class="legend-item-desc">Malware missed, false positives, privacy concerns, protection failures, lost trust in security</div>
+
+        <div class="examples-section">
+            <div class="examples-title">💡 Key Lifecycle Insights</div>
+            <div class="example-item">
+                <span class="example-label">Satisfaction Expression (4.2★, 10.0%):</span> "Thanks!", "Love it!", "5 stars!", "Great app!"
+            </div>
+            <div class="example-item">
+                <span class="example-label">Uninstall (2.1★, 3.9%):</span> "Switching to competitor", "Removing due to issues", "Uninstalling now"
+            </div>
+            <div class="example-item">
+                <span class="example-label">Usage (3.2★, 43.7%):</span> "Works but has bugs", "Good protection, slow scans", "App freezes sometimes"
+            </div>
+            <div class="example-item">
+                <span class="example-label">General Feedback (3.8★, 17.2%):</span> "Overall good experience", "Decent antivirus", "Pretty satisfied"
+            </div>
         </div>
-        <div class="legend-item negative">
-            <div class="legend-item-title">⚡ Scalability Issues (2.7%)</div>
-            <div class="legend-item-desc">High battery drain, excessive memory usage, system slowdowns, device performance impact</div>
+        </div>
+
+        <div class="legend-section">
+            <div class="legend-title">📚 Lifecycle Stage Definitions</div>
+            <div class="legend-grid">
+                <div class="legend-item positive">
+                    <div class="legend-item-title">✅ Satisfaction Expression (10.0%)</div>
+                    <div class="legend-item-desc">Brief positive feedback: "Thanks!", "Love it!", "5 stars!", general appreciation without details</div>
+                </div>
+                <div class="legend-item neutral">
+                    <div class="legend-item-title">💬 General Feedback (17.2%)</div>
+                    <div class="legend-item-desc">Overall experience sharing without specific technical issues or feature mentions</div>
+                </div>
+                <div class="legend-item neutral">
+                    <div class="legend-item-title">🔧 Feature Requests (1.3%)</div>
+                    <div class="legend-item-desc">Improvement suggestions: "Would be nice if...", "Please add...", new feature ideas</div>
+                </div>
+                <div class="legend-item neutral">
+                    <div class="legend-item-title">📱 Usage (43.7%)</div>
+                    <div class="legend-item-desc">Daily operational feedback: performance complaints, feature issues, regular use problems</div>
+                </div>
+                <div class="legend-item negative">
+                    <div class="legend-item-title">🚀 Onboarding (6.9%)</div>
+                    <div class="legend-item-desc">Initial setup problems: installation failures, configuration difficulties, first-time user confusion</div>
+                </div>
+                <div class="legend-item negative">
+                    <div class="legend-item-title">❌ Uninstall (3.9%)</div>
+                    <div class="legend-item-desc">Removal intent: switching to competitors, uninstalling due to persistent issues</div>
+                </div>
+                <div class="legend-item neutral">
+                    <div class="legend-item-title">❓ Unrelated (17.0%)</div>
+                    <div class="legend-item-desc">Off-topic content: unclear context, insufficient information, non-product related</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="legend-section">
+            <div class="legend-title">⚠️ Leadership NFR Issues (All Represent Problems)</div>
+            <div class="legend-grid">
+                <div class="legend-item negative">
+                    <div class="legend-item-title">🔧 Reliability Issues (81.9%)</div>
+                    <div class="legend-item-desc">App crashes, performance slowdowns, UI glitches, billing failures, poor support response</div>
+                </div>
+                <div class="legend-item negative">
+                    <div class="legend-item-title">🛡️ Security Issues (15.4%)</div>
+                    <div class="legend-item-desc">Malware missed, false positives, privacy concerns, protection failures, lost trust in security</div>
+                </div>
+                <div class="legend-item negative">
+                    <div class="legend-item-title">⚡ Scalability Issues (2.7%)</div>
+                    <div class="legend-item-desc">High battery drain, excessive memory usage, system slowdowns, device performance impact</div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
-</div>
 
-<script>
-// Enhanced dataset with logical color mapping
-const enhancedDataset = {
-    lifecycle: [
-        { stage: 'usage', count: 6622, percentage: 43.7, avgRating: 3.2, color: '#ff9800' }, // Neutral orange
-        { stage: 'general_feedback', count: 2605, percentage: 17.2, avgRating: 3.8, color: '#ffc107' }, // Neutral yellow
-        { stage: 'unrelated', count: 2579, percentage: 17.0, avgRating: 3.1, color: '#9e9e9e' }, // Gray
-        { stage: 'satisfaction_expression', count: 1519, percentage: 10.0, avgRating: 4.2, color: '#4caf50' }, // Positive green
-        { stage: 'onboarding', count: 1040, percentage: 6.9, avgRating: 2.8, color: '#f44336' }, // Negative red
-        { stage: 'uninstall', count: 588, percentage: 3.9, avgRating: 2.1, color: '#d32f2f' }, // Dark red
-        { stage: 'feature_requests', count: 200, percentage: 1.3, avgRating: 3.5, color: '#2196f3' } // Blue
-    ],
-    nfr: [
-        { type: 'reliability', count: 12407, percentage: 81.9, avgRating: 3.1, color: '#f44336' }, // Red (problems)
-        { type: 'security', count: 2336, percentage: 15.4, avgRating: 3.4, color: '#ff5722' }, // Orange-red (security issues)
-        { type: 'scalability', count: 410, percentage: 2.7, avgRating: 2.8, color: '#ff9800' } // Orange (performance issues)
-    ],
-    domain: [
-        { category: 'product_features', count: 9332, percentage: 61.6, avgRating: 3.2, color: '#2196f3' },
-        { category: 'customer_support', count: 2112, percentage: 13.9, avgRating: 2.8, color: '#f44336' },
-        { category: 'product_core', count: 2018, percentage: 13.3, avgRating: 3.4, color: '#4caf50' },
-        { category: 'billing', count: 1127, percentage: 7.4, avgRating: 2.9, color: '#ff9800' },
-        { category: 'product_endpoint_integration', count: 564, percentage: 3.7, avgRating: 3.1, color: '#9c27b0' }
-    ],
-    ratings: [
-        { rating: 5, count: 3240, percentage: 21.4, color: '#4caf50' },
-        { rating: 4, count: 1820, percentage: 12.0, color: '#8bc34a' },
-        { rating: 3, count: 1518, percentage: 10.0, color: '#ffc107' },
-        { rating: 2, count: 2284, percentage: 15.1, color: '#ff9800' },
-        { rating: 1, count: 6291, percentage: 41.5, color: '#f44336' }
-    ]
-};
+    <script>
+        // Enhanced dataset with logical color mapping
+        const enhancedDataset = {
+            lifecycle: [
+                { stage: 'usage', count: 6622, percentage: 43.7, avgRating: 3.2, color: '#ff9800' }, // Neutral orange
+                { stage: 'general_feedback', count: 2605, percentage: 17.2, avgRating: 3.8, color: '#ffc107' }, // Neutral yellow
+                { stage: 'unrelated', count: 2579, percentage: 17.0, avgRating: 3.1, color: '#9e9e9e' }, // Gray
+                { stage: 'satisfaction_expression', count: 1519, percentage: 10.0, avgRating: 4.2, color: '#4caf50' }, // Positive green
+                { stage: 'onboarding', count: 1040, percentage: 6.9, avgRating: 2.8, color: '#f44336' }, // Negative red
+                { stage: 'uninstall', count: 588, percentage: 3.9, avgRating: 2.1, color: '#d32f2f' }, // Dark red
+                { stage: 'feature_requests', count: 200, percentage: 1.3, avgRating: 3.5, color: '#2196f3' } // Blue
+            ],
+            nfr: [
+                { type: 'reliability', count: 12407, percentage: 81.9, avgRating: 3.1, color: '#f44336' }, // Red (problems)
+                { type: 'security', count: 2336, percentage: 15.4, avgRating: 3.4, color: '#ff5722' }, // Orange-red (security issues)
+                { type: 'scalability', count: 410, percentage: 2.7, avgRating: 2.8, color: '#ff9800' } // Orange (performance issues)
+            ],
+            domain: [
+                { category: 'product_features', count: 9332, percentage: 61.6, avgRating: 3.2, color: '#2196f3' },
+                { category: 'customer_support', count: 2112, percentage: 13.9, avgRating: 2.8, color: '#f44336' },
+                { category: 'product_core', count: 2018, percentage: 13.3, avgRating: 3.4, color: '#4caf50' },
+                { category: 'billing', count: 1127, percentage: 7.4, avgRating: 2.9, color: '#ff9800' },
+                { category: 'product_endpoint_integration', count: 564, percentage: 3.7, avgRating: 3.1, color: '#9c27b0' }
+            ],
+            ratings: [
+                { rating: 5, count: 3240, percentage: 21.4, color: '#4caf50' },
+                { rating: 4, count: 1820, percentage: 12.0, color: '#8bc34a' },
+                { rating: 3, count: 1518, percentage: 10.0, color: '#ffc107' },
+                { rating: 2, count: 2284, percentage: 15.1, color: '#ff9800' },
+                { rating: 1, count: 6291, percentage: 41.5, color: '#f44336' }
+            ]
+        };
 
-let charts = {};
+        let charts = {};
 
-function createLifecycleChart() {
-    const ctx = document.getElementById('lifecycleChart').getContext('2d');
-    if (charts.lifecycle) charts.lifecycle.destroy();
-    
-    charts.lifecycle = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-            labels: enhancedDataset.lifecycle.map(item => 
-                item.stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-            ),
-            datasets: [{
-                data: enhancedDataset.lifecycle.map(item => item.count),
-                backgroundColor: enhancedDataset.lifecycle.map(item => item.color),
-                borderWidth: 3,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const item = enhancedDataset.lifecycle[context.dataIndex];
-                            return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-function createNfrChart() {
-    const ctx = document.getElementById('nfrChart').getContext('2d');
-    if (charts.nfr) charts.nfr.destroy();
-    
-    charts.nfr = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: enhancedDataset.nfr.map(item => 
-                item.type.charAt(0).toUpperCase() + item.type.slice(1)
-            ),
-            datasets: [{
-                label: 'Review Count',
-                data: enhancedDataset.nfr.map(item => item.count),
-                backgroundColor: enhancedDataset.nfr.map(item => item.color),
-                borderRadius: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { 
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const item = enhancedDataset.nfr[context.dataIndex];
-                            return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-}
-
-function createDomainChart() {
-    const ctx = document.getElementById('domainChart').getContext('2d');
-    if (charts.domain) charts.domain.destroy();
-    
-    charts.domain = new Chart(ctx, {
-        type: 'pie',
-        data: {
-            labels: enhancedDataset.domain.map(item => 
-                item.category.replace(/product_|_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
-            ),
-            datasets: [{
-                data: enhancedDataset.domain.map(item => item.count),
-                backgroundColor: enhancedDataset.domain.map(item => item.color),
-                borderWidth: 2,
-                borderColor: '#fff'
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: {
-                legend: { position: 'bottom' },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const item = enhancedDataset.domain[context.dataIndex];
-                            return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
-                        }
-                    }
-                }
-            }
-        }
-    });
-}
-
-function createRatingChart() {
-    const ctx = document.getElementById('ratingChart').getContext('2d');
-    if (charts.rating) charts.rating.destroy();
-    
-    charts.rating = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: enhancedDataset.ratings.map(item => `${item.rating} Star${item.rating > 1 ? 's' : ''}`),
-            datasets: [{
-                label: 'Review Count',
-                data: enhancedDataset.ratings.map(item => item.count),
-                backgroundColor: enhancedDataset.ratings.map(item => item.color),
-                borderRadius: 8
-            }]
-        },
-        options: {
-            responsive: true,
-            plugins: { 
-                legend: { display: false },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const item = enhancedDataset.ratings[context.dataIndex];
-                            return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%)`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                y: { beginAtZero: true }
-            }
-        }
-    });
-}
-
-function createDomainNfrChart() {
-    const ctx = document.getElementById('domainNfrChart').getContext('2d');
-    if (charts.domainNfr) charts.domainNfr.destroy();
-    
-    // Cross-analysis data with realistic distribution
-    const domainNfrData = {
-        labels: ['Features', 'Customer Support', 'Product Core', 'Billing', 'Endpoint Integration'],
-        datasets: [
-            {
-                label: 'Reliability Issues',
-                data: [7654, 1734, 1655, 925, 439],
-                backgroundColor: '#f44336',
-                borderColor: '#d32f2f',
-                borderWidth: 1
-            },
-            {
-                label: 'Security Concerns',
-                data: [1445, 308, 312, 174, 97],
-                backgroundColor: '#ff5722',
-                borderColor: '#e64a19',
-                borderWidth: 1
-            },
-            {
-                label: 'Scalability Issues',
-                data: [233, 70, 51, 28, 28],
-                backgroundColor: '#ff9800',
-                borderColor: '#f57c00',
-                borderWidth: 1
-            }
-        ]
-    };
-    
-    charts.domainNfr = new Chart(ctx, {
-        type: 'bar',
-        data: domainNfrData,
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    mode: 'index',
-                    intersect: false,
-                    callbacks: {
-                        label: function(context) {
-                            return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} reviews`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: { stacked: true },
-                y: { stacked: true, beginAtZero: true }
-            }
-        }
-    });
-}
-
-function createLifecycleRatingChart() {
-    const ctx = document.getElementById('lifecycleRatingChart').getContext('2d');
-    if (charts.lifecycleRating) charts.lifecycleRating.destroy();
-    
-    charts.lifecycleRating = new Chart(ctx, {
-        type: 'scatter',
-        data: {
-            datasets: enhancedDataset.lifecycle.map((item, index) => ({
-                label: item.stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
-                data: [{
-                    x: item.percentage,
-                    y: item.avgRating
-                }],
-                backgroundColor: item.color,
-                borderColor: item.color,
-                borderWidth: 2,
-                pointRadius: Math.max(8, (item.count / 1000) * 2), // Much more dramatic sizing
-                pointHoverRadius: Math.max(12, (item.count / 1000) * 2.5)
-            }))
-        },
-        options: {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: {
-                legend: { position: 'top' },
-                tooltip: {
-                    callbacks: {
-                        label: function(context) {
-                            const item = enhancedDataset.lifecycle[context.datasetIndex];
-                            return `${context.dataset.label}: ${item.percentage}% of reviews, ${item.avgRating}★ avg rating (${item.count.toLocaleString()} reviews)`;
-                        }
-                    }
-                }
-            },
-            scales: {
-                x: {
-                    title: { display: true, text: 'Percentage of Reviews' },
-                    beginAtZero: true,
-                    max: 50
-                },
-                y: {
-                    title: { display: true, text: 'Average Rating' },
-                    min: 0,
-                    max: 5
-                }
-            }
-        }
-    });
-}
-
-function animateNumbers() {
-    const numberElements = [
-        { id: 'totalReviews', target: 15153 },
-        { id: 'avgRating', target: 3.16, suffix: '★' }
-    ];
-
-    numberElements.forEach(element => {
-        const el = document.getElementById(element.id);
-        if (el) {
-            let current = 0;
-            const increment = element.target / 100;
+        function createLifecycleChart() {
+            const ctx = document.getElementById('lifecycleChart').getContext('2d');
+            if (charts.lifecycle) charts.lifecycle.destroy();
             
-            const timer = setInterval(() => {
-                current += increment;
-                if (current >= element.target) {
-                    current = element.target;
-                    clearInterval(timer);
+            charts.lifecycle = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: enhancedDataset.lifecycle.map(item => 
+                        item.stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                    ),
+                    datasets: [{
+                        data: enhancedDataset.lifecycle.map(item => item.count),
+                        backgroundColor: enhancedDataset.lifecycle.map(item => item.color),
+                        borderWidth: 3,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = enhancedDataset.lifecycle[context.dataIndex];
+                                    return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
+                                }
+                            }
+                        }
+                    }
                 }
-                
-                if (element.id === 'totalReviews') {
-                    el.textContent = Math.floor(current).toLocaleString();
-                } else {
-                    el.textContent = current.toFixed(2) + (element.suffix || '');
-                }
-            }, 20);
+            });
         }
-    });
-}
 
-// Initialize dashboard
-window.addEventListener('load', function() {
-    console.log('McAfee Analytics Dashboard Initializing...');
-    
-    // Create all charts
-    createLifecycleChart();
-    createNfrChart();
-    createDomainChart();
-    createRatingChart();
-    createDomainNfrChart();
-    createLifecycleRatingChart();
-    
-    // Animate summary numbers
-    animateNumbers();
-    
-    console.log('✅ Dashboard loaded successfully with meaningful categories and logical colors');
-    console.log('📊 Charts rendered:', Object.keys(charts));
-    console.log('🎯 Bubble chart sized by review volume');
-});
+        function createNfrChart() {
+            const ctx = document.getElementById('nfrChart').getContext('2d');
+            if (charts.nfr) charts.nfr.destroy();
+            
+            charts.nfr = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: enhancedDataset.nfr.map(item => 
+                        item.type.charAt(0).toUpperCase() + item.type.slice(1)
+                    ),
+                    datasets: [{
+                        label: 'Review Count',
+                        data: enhancedDataset.nfr.map(item => item.count),
+                        backgroundColor: enhancedDataset.nfr.map(item => item.color),
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = enhancedDataset.nfr[context.dataIndex];
+                                    return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
 
-// Handle window resize
-window.addEventListener('resize', function() {
-    Object.values(charts).forEach(chart => {
-        if (chart) chart.resize();
-    });
-});
-</script>
+        function createDomainChart() {
+            const ctx = document.getElementById('domainChart').getContext('2d');
+            if (charts.domain) charts.domain.destroy();
+            
+            charts.domain = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: enhancedDataset.domain.map(item => 
+                        item.category.replace(/product_|_/g, ' ').replace(/\b\w/g, l => l.toUpperCase())
+                    ),
+                    datasets: [{
+                        data: enhancedDataset.domain.map(item => item.count),
+                        backgroundColor: enhancedDataset.domain.map(item => item.color),
+                        borderWidth: 2,
+                        borderColor: '#fff'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: { position: 'bottom' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = enhancedDataset.domain[context.dataIndex];
+                                    return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%) - ${item.avgRating}★ avg`;
+                                }
+                            }
+                        }
+                    }
+                }
+            });
+        }
 
-<footer style="background: var(--primary-red); color: white; text-align: center; padding: 3rem 2rem; margin-top: 4rem;">
-<h3>McAfee Reviews Analytics Dashboard</h3>
-<p>Powered by AI-Enhanced Category Classification | 15,153 Reviews Analyzed | Logical Color Coding</p>
-<p style="margin-top: 1rem; opacity: 0.8;">
-    Lifecycle: 7 Categories • NFR: 3 Types • Domain: 5 Categories • No Filters Needed
-</p>
-<div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
-    ✅ Meaningful Color Logic • ✅ Bubble Sizing by Volume • ✅ Category Explanations • ✅ Real Examples
-</div>
-</footer>
+        function createRatingChart() {
+            const ctx = document.getElementById('ratingChart').getContext('2d');
+            if (charts.rating) charts.rating.destroy();
+            
+            charts.rating = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: enhancedDataset.ratings.map(item => `${item.rating} Star${item.rating > 1 ? 's' : ''}`),
+                    datasets: [{
+                        label: 'Review Count',
+                        data: enhancedDataset.ratings.map(item => item.count),
+                        backgroundColor: enhancedDataset.ratings.map(item => item.color),
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { 
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = enhancedDataset.ratings[context.dataIndex];
+                                    return `${context.label}: ${item.count.toLocaleString()} reviews (${item.percentage}%)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        y: { beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function createDomainNfrChart() {
+            const ctx = document.getElementById('domainNfrChart').getContext('2d');
+            if (charts.domainNfr) charts.domainNfr.destroy();
+            
+            // Cross-analysis data with realistic distribution
+            const domainNfrData = {
+                labels: ['Features', 'Customer Support', 'Product Core', 'Billing', 'Endpoint Integration'],
+                datasets: [
+                    {
+                        label: 'Reliability Issues',
+                        data: [7654, 1734, 1655, 925, 439],
+                        backgroundColor: '#f44336',
+                        borderColor: '#d32f2f',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Security Concerns',
+                        data: [1445, 308, 312, 174, 97],
+                        backgroundColor: '#ff5722',
+                        borderColor: '#e64a19',
+                        borderWidth: 1
+                    },
+                    {
+                        label: 'Scalability Issues',
+                        data: [233, 70, 51, 28, 28],
+                        backgroundColor: '#ff9800',
+                        borderColor: '#f57c00',
+                        borderWidth: 1
+                    }
+                ]
+            };
+            
+            charts.domainNfr = new Chart(ctx, {
+                type: 'bar',
+                data: domainNfrData,
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y.toLocaleString()} reviews`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { stacked: true },
+                        y: { stacked: true, beginAtZero: true }
+                    }
+                }
+            });
+        }
+
+        function createLifecycleRatingChart() {
+            const ctx = document.getElementById('lifecycleRatingChart').getContext('2d');
+            if (charts.lifecycleRating) charts.lifecycleRating.destroy();
+            
+            charts.lifecycleRating = new Chart(ctx, {
+                type: 'scatter',
+                data: {
+                    datasets: enhancedDataset.lifecycle.map((item, index) => ({
+                        label: item.stage.replace(/_/g, ' ').replace(/\b\w/g, l => l.toUpperCase()),
+                        data: [{
+                            x: item.percentage,
+                            y: item.avgRating
+                        }],
+                        backgroundColor: item.color,
+                        borderColor: item.color,
+                        borderWidth: 2,
+                        pointRadius: Math.max(8, (item.count / 1000) * 2), // Much more dramatic sizing
+                        pointHoverRadius: Math.max(12, (item.count / 1000) * 2.5)
+                    }))
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    const item = enhancedDataset.lifecycle[context.datasetIndex];
+                                    return `${context.dataset.label}: ${item.percentage}% of reviews, ${item.avgRating}★ avg rating (${item.count.toLocaleString()} reviews)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            title: { display: true, text: 'Percentage of Reviews' },
+                            beginAtZero: true,
+                            max: 50
+                        },
+                        y: {
+                            title: { display: true, text: 'Average Rating' },
+                            min: 0,
+                            max: 5
+                        }
+                    }
+                }
+            });
+        }
+
+        function animateNumbers() {
+            const numberElements = [
+                { id: 'totalReviews', target: 15153 },
+                { id: 'avgRating', target: 3.16, suffix: '★' }
+            ];
+
+            numberElements.forEach(element => {
+                const el = document.getElementById(element.id);
+                if (el) {
+                    let current = 0;
+                    const increment = element.target / 100;
+                    
+                    const timer = setInterval(() => {
+                        current += increment;
+                        if (current >= element.target) {
+                            current = element.target;
+                            clearInterval(timer);
+                        }
+                        
+                        if (element.id === 'totalReviews') {
+                            el.textContent = Math.floor(current).toLocaleString();
+                        } else {
+                            el.textContent = current.toFixed(2) + (element.suffix || '');
+                        }
+                    }, 20);
+                }
+            });
+        }
+
+        // Initialize dashboard
+        window.addEventListener('load', function() {
+            console.log('McAfee Analytics Dashboard Initializing...');
+            
+            // Create all charts
+            createLifecycleChart();
+            createNfrChart();
+            createDomainChart();
+            createRatingChart();
+            createDomainNfrChart();
+            createLifecycleRatingChart();
+            
+            // Animate summary numbers
+            animateNumbers();
+            
+            console.log('✅ Dashboard loaded successfully with meaningful categories and logical colors');
+            console.log('📊 Charts rendered:', Object.keys(charts));
+            console.log('🎯 Bubble chart sized by review volume');
+        });
+
+        // Handle window resize
+        window.addEventListener('resize', function() {
+            Object.values(charts).forEach(chart => {
+                if (chart) chart.resize();
+            });
+        });
+    </script>
+
+    <footer style="background: var(--primary-red); color: white; text-align: center; padding: 3rem 2rem; margin-top: 4rem;">
+        <h3>McAfee Reviews Analytics Dashboard</h3>
+        <p>Powered by AI-Enhanced Category Classification | 15,153 Reviews Analyzed | Logical Color Coding</p>
+        <p style="margin-top: 1rem; opacity: 0.8;">
+            Lifecycle: 7 Categories • NFR: 3 Types • Domain: 5 Categories • No Filters Needed
+        </p>
+        <div style="margin-top: 1rem; font-size: 0.9rem; opacity: 0.7;">
+            ✅ Meaningful Color Logic • ✅ Bubble Sizing by Volume • ✅ Category Explanations • ✅ Real Examples
+        </div>
+    </footer>
 </body>
 </html>
